@@ -1,0 +1,99 @@
+{
+  "runConfigurations": [
+    {
+      "id": "ROSbotTutorial_Cfg01",
+      "name": "ROSbotTutorial Robot",
+      "type": "colcon build",
+      "cfg": {
+        "workingDir": "./ROSbotTutorial/robot_ws",
+        "cmdArgs": ""
+      }
+    },
+    {
+      "id": "ROSbotTutorial_Cfg02",
+      "name": "ROSbotTutorial Robot",
+      "type": "colcon bundle",
+      "cfg": {
+        "workingDir": "./ROSbotTutorial/robot_ws",
+        "cmdArgs": ""
+      }
+    },
+    {
+      "id": "ROSbotTutorial_Cfg03",
+      "name": "ROSbotTutorial Simulation",
+      "type": "colcon build",
+      "cfg": {
+        "workingDir": "./ROSbotTutorial/simulation_ws",
+        "cmdArgs": ""
+      }
+    },
+    {
+      "id": "ROSbotTutorial_Cfg04",
+      "name": "ROSbotTutorial Simulation",
+      "type": "colcon bundle",
+      "cfg": {
+        "workingDir": "./ROSbotTutorial/simulation_ws",
+        "cmdArgs": ""
+      }    },
+    {
+      "id": "ROSbotTutorial_SimulationJob1",
+      "name": "ROSbotTutorial",
+      "type": "simulation",
+      "cfg": {
+        "robotApp": {
+          "name": "RoboMakerROSbotTutorialRobot",
+          "s3Bucket": "YOUR_BUCKET_NAME",
+          "sourceBundleFile": "./ROSbotTutorial/robot_ws/bundle/output.tar.gz",
+          "architecture": "X86_64",
+          "robotSoftwareSuite": {
+            "version": "Kinetic",
+            "name": "ROS"
+          },
+          "launchConfig": {
+            "packageName": "tutorial_pkg",
+            "launchFile": "tutorial_6_gazebo_rosbot.launch"
+          }
+        },
+        "simulationApp": {
+          "name": "RoboMakerROSbotTutorialSimulation",
+          "s3Bucket": "YOUR_BUCKET_NAME",
+          "sourceBundleFile": "./ROSbotTutorial/simulation_ws/bundle/output.tar.gz",
+          "architecture": "X86_64",
+          "launchConfig": {
+            "packageName": "tutorial_pkg",
+            "launchFile": "tutorial_6_gazebo_world.launch"
+          },
+          "robotSoftwareSuite": {
+            "version": "Kinetic",
+            "name": "ROS"
+          },
+          "simulationSoftwareSuite": {
+            "name": "Gazebo",
+            "version": "7"
+          },
+          "renderingEngine": {
+            "name": "OGRE",
+            "version": "1.x"
+          }
+        },
+        "simulation": {
+          "outputLocation": "YOUR_BUCKET_NAME",
+          "failureBehavior": "Fail",
+          "maxJobDurationInSeconds": 900,
+          "iamRole": "YOUR_IAM_ROLE_ID"
+        }
+      }
+    },
+    {
+      "id": "ROSbotTutorial_wf1",
+      "type": "workflow",
+      "name": "ROSbotTutorial - Build and Bundle All",
+      "runCfgIds": [
+        "ROSbotTutorial_Cfg01",
+        "ROSbotTutorial_Cfg02",
+        "ROSbotTutorial_Cfg03",
+        "ROSbotTutorial_Cfg04"
+      ]
+    }
+  ]
+}
