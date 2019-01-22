@@ -1,0 +1,15 @@
+[submodule "robot_ws/src/rosbot_description"]
+	path = robot_ws/src/rosbot_description
+	url = https://github.com/husarion/rosbot_description.git
+[submodule "robot_ws/src/tutorial_pkg"]
+	path = robot_ws/src/tutorial_pkg
+	url = https://github.com/husarion/tutorial_pkg.git
+[submodule "robot_ws/src/husarion_ros"]
+	path = robot_ws/src/husarion_ros
+	url = https://github.com/lukaszmitka/husarion_ros.git
+[submodule "simulation_ws/src/tutorial_pkg"]
+	path = simulation_ws/src/tutorial_pkg
+	url = https://github.com/husarion/tutorial_pkg.git
+[submodule "simulation_ws/src/rosbot_description"]
+	path = simulation_ws/src/rosbot_description
+	url = https://github.com/husarion/rosbot_description.git
