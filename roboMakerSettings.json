@@ -5,7 +5,7 @@
       "name": "ROSbotTutorial Robot",
       "type": "colcon build",
       "cfg": {
-        "workingDir": "./ROSbotTutorial/robot_ws",
+        "workingDir": "./RoboMakerROSbotProject/robot_ws", 
         "cmdArgs": ""
       }
     },
@@ -14,7 +14,7 @@
       "name": "ROSbotTutorial Robot",
       "type": "colcon bundle",
       "cfg": {
-        "workingDir": "./ROSbotTutorial/robot_ws",
+        "workingDir": "./RoboMakerROSbotProject/robot_ws", 
         "cmdArgs": ""
       }
     },
@@ -23,7 +23,7 @@
       "name": "ROSbotTutorial Simulation",
       "type": "colcon build",
       "cfg": {
-        "workingDir": "./ROSbotTutorial/simulation_ws",
+        "workingDir": "./RoboMakerROSbotProject/simulation_ws", 
         "cmdArgs": ""
       }
     },
@@ -32,7 +32,7 @@
       "name": "ROSbotTutorial Simulation",
       "type": "colcon bundle",
       "cfg": {
-        "workingDir": "./ROSbotTutorial/simulation_ws",
+        "workingDir": "./RoboMakerROSbotProject/simulation_ws", 
         "cmdArgs": ""
       }    },
     {
@@ -43,7 +43,7 @@
         "robotApp": {
           "name": "RoboMakerROSbotTutorialRobot",
           "s3Bucket": "YOUR_BUCKET_NAME",
-          "sourceBundleFile": "./ROSbotTutorial/robot_ws/bundle/output.tar.gz",
+          "sourceBundleFile": "./RoboMakerROSbotProject/robot_ws/bundle/output.tar.gz", 
           "architecture": "X86_64",
           "robotSoftwareSuite": {
             "version": "Kinetic",
@@ -57,7 +57,7 @@
         "simulationApp": {
           "name": "RoboMakerROSbotTutorialSimulation",
           "s3Bucket": "YOUR_BUCKET_NAME",
-          "sourceBundleFile": "./ROSbotTutorial/simulation_ws/bundle/output.tar.gz",
+          "sourceBundleFile": "./RoboMakerROSbotProject/simulation_ws/bundle/output.tar.gz", 
           "architecture": "X86_64",
           "launchConfig": {
             "packageName": "tutorial_pkg",
