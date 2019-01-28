@@ -17,6 +17,12 @@ cd ~/environment/
 git clone --recurse-submodules https://github.com/lukaszmitka/RoboMakerROSbotProject.git
 ```
 
+Update all submodules:
+
+```
+git submodule update --recursive --remote
+```
+
 - Configure the project using provided script:
 
 ```
