@@ -20,7 +20,7 @@ git submodule update --recursive --remote
 
 # configure project
 cd ~/environment/RoboMakerROSbotProject/
-python configure_project.py
+python configure_project.py --bucket $BUCKET_NAME --iam $IAM_ROLE
 
 # prepare docker for armhf compilation
 cd /opt/robomaker/cross-compilation-dockerfile/
