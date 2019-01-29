@@ -51,3 +51,6 @@ docker exec $CONTAINER_ID  ws/armhf.sh
 cd ~/environment/RoboMakerROSbotProject
 aws s3 cp robot_ws/armhf_bundle/output.tar.gz s3://$BUCKET_NAME/RoboMakerROSbotProject/robot_ws/bundle/output.armhf.tar.gz
 
+# start deployment job
+cd ~/environment/RoboMakerROSbotProject
+python deploy.py $BUCKET_NAME
