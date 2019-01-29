@@ -9,9 +9,10 @@ then
 else
     echo "Please run this script with two arguments"
     echo "./IDE_setup.sh BUCKET_NAME IAM_ROLE"
+    exit 1
 fi
 
-# install boto3 
+# install boto3
 pip install boto3
 
 # update the submodules
@@ -22,9 +23,14 @@ git submodule update --recursive --remote
 cd ~/environment/RoboMakerROSbotProject/
 python configure_project.py --bucket $BUCKET_NAME --iam $IAM_ROLE
 
+while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+    echo "wait for other apt instances to finish"
+    sleep 1
+done
+
 # build X86_64 architecture
 cd ~/environment/RoboMakerROSbotProject/robot_ws
-source /opt/ros/kinetic/setup.bash
+. /opt/ros/kinetic/setup.sh
 rosdep install --from-paths src --ignore-src -r -y
 colcon build
 colcon bundle
