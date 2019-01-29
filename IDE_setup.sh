@@ -11,6 +11,9 @@ else
     echo "./IDE_setup.sh BUCKET_NAME IAM_ROLE"
 fi
 
+# install boto3 
+pip install boto3
+
 # update the submodules
 cd ~/environment/RoboMakerROSbotProject
 git submodule update --recursive --remote
