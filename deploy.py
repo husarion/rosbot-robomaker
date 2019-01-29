@@ -1,5 +1,6 @@
 import boto3
 import sys
+import argparse
 
 
 def get_fleet_arn(robomaker, default_fleet_name):
@@ -132,13 +133,11 @@ def add_armhf_to_app(robomaker, app_arn):
     return
 
 
-def start_deployment():
+def start_deployment(tutorial_number, user_fleet_name, user_robot_name):
     # Begin working with robomaker
     print("Init robomaker")
     robomaker_client = boto3.client('robomaker')
-
-    tutorial_num = 6
-    fleet_arn = get_fleet_arn(robomaker_client, 'ROSbotFleet')
+    fleet_arn = get_fleet_arn(robomaker_client, user_fleet_name)
     response = robomaker_client.describe_fleet(fleet=fleet_arn)
     print('Clean fleet')
     for robot in response.get('robots'):
@@ -147,7 +146,7 @@ def start_deployment():
             robot=robot.get('arn')
         )
     print("Fleet empty, now desired robot will be added")
-    rosbot_arn = get_robot_arn(robomaker_client, 'ROSbot')
+    rosbot_arn = get_robot_arn(robomaker_client, user_robot_name)
     if rosbot_arn:
         update_robot_fleet(robomaker_client, rosbot_arn, fleet_arn)
     else:
@@ -159,8 +158,31 @@ def start_deployment():
     app_version = get_current_application_version(
         robomaker_client, application_arn)
     create_deployment(robomaker_client, fleet_arn,
-                      application_arn, app_version, tutorial_num)
+                      application_arn, app_version, tutorial_number)
 
 
 if __name__ == "__main__":
-    start_deployment()
+    tutorial_num = 8
+    robot_name = ''
+    fleet_name = ''
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--tutorial", help="Number of tutorial to be used for deployment, default is 8", type=int)
+    parser.add_argument("--fleet", help="Fleet name to be used, default is ROSbotFleet")
+    parser.add_argument("--robot", help="Robot name to be used, default is ROSbot")
+    args = parser.parse_args()
+    if args.tutorial:
+        tutorial_num = args.tutorial
+    else:
+        tutorial_num = 8
+
+    if args.fleet:
+        fleet_name = args.fleet
+    else:
+        fleet_name = 'ROSbotFleet'
+
+    if args.robot:
+        robot_name = args.robot
+    else:
+        robot_name = 'ROSbot'
+        
+    start_deployment(tutorial_num, fleet_name, robot_name)
