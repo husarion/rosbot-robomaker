@@ -129,9 +129,11 @@ def create_deployment(robomaker, fleet_arn, app_arn, app_ver, tutorial_number):
 def add_armhf_to_app(robomaker, app_arn, bucket_id, prefix):
     describe_robot_application_response = robomaker.describe_robot_application(
         application=app_arn
-        )
+    )
     print('Will update robot application with')
     print('Name: ' + describe_robot_application_response.get('name'))
+    found_armhf_arch = False
+    found_x86_64_arch = False
     sources_list = []
     for source in describe_robot_application_response.get('sources'):
         s = OrderedDict([
@@ -139,18 +141,31 @@ def add_armhf_to_app(robomaker, app_arn, bucket_id, prefix):
             ('s3Key', source.get('s3Key')),
             ('architecture', source.get('architecture'))
         ])
+        if source.get('architecture') == 'ARMHF':
+            found_armhf_arch = True
+        if source.get('architecture') == 'X86_64':
+            found_x86_64_arch = True
         sources_list.append(s)
         print('Source:')
         print('    s3Bucket: ' + source.get('s3Bucket'))
         print('    s3Key: ' + source.get('s3Key'))
         print('    architecture: ' + source.get('architecture'))
 
-    armhf_source = OrderedDict([
-        ('s3Bucket', bucket_id),
-        ('s3Key', prefix+'/output.armhf.tar.gz'),
-        ('architecture', 'ARMHF')
-    ])
-    sources_list.append(armhf_source)
+    if not found_armhf_arch:
+        armhf_source = OrderedDict([
+            ('s3Bucket', bucket_id),
+            ('s3Key', prefix+'/output.armhf.tar.gz'),
+            ('architecture', 'ARMHF')
+        ])
+        sources_list.append(armhf_source)
+
+    if not found_x86_64_arch:
+        armhf_source = OrderedDict([
+            ('s3Bucket', bucket_id),
+            ('s3Key', prefix+'/output.tar.gz'),
+            ('architecture', 'X86_64')
+        ])
+        sources_list.append(armhf_source)
 
     print('Sources list contain ' + str(len(sources_list)) + ' objects')
 
