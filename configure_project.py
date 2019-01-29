@@ -1,5 +1,7 @@
+#!/usr/bin/python
 from collections import OrderedDict
 import json
+import argparse
 
 
 def create_robot_build_task():
@@ -162,16 +164,28 @@ def getSimulationJob(bucket_name, tutorial_number, iam_role):
 
 
 def main():
+    user_bucket_name = ''
+    user_iam_role = ''
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--bucket", help="Identifier for bucket containing app bundles")
+    parser.add_argument("--iam", help="IAM role for RoboMaker")
+    args = parser.parse_args()
+    if args.bucket:
+        user_bucket_name = args.bucket
+    else:
+        print "Enter name of bucket containing app bundles:"
+        user_bucket_name = raw_input()
+    if args.iam:
+        user_iam_role = args.iam
+    else:
+        print "Enter IAM role (string like 'arn:aws:iam::xxxxxxxxxxxx:role/xxxxxxxxxxxxx)' :"
+        user_iam_role = raw_input()
+
     run_config_1 = create_robot_build_task()
     run_config_2 = create_robot_bundle_task()
     run_config_3 = create_simulation_build_task()
     run_config_4 = create_simulation_bundle_task()
 
-    print "Enter bucket name:"
-    user_bucket_name = raw_input()
-
-    print "Enter IAM role (string like 'arn:aws:iam::xxxxxxxxxxxx:role/xxxxxxxxxxxxx)' :"
-    user_iam_role = raw_input()
 
     workflow_1 = OrderedDict([
         ('id', 'ROSbotTutorial_wf1'),
@@ -194,6 +208,8 @@ def main():
                 run_config_3,
                 run_config_4,
                 getSimulationJob(user_bucket_name, 6, user_iam_role),
+                getSimulationJob(user_bucket_name, 7, user_iam_role),
+                getSimulationJob(user_bucket_name, 8, user_iam_role),
                 workflow_1
             ])
     ])
