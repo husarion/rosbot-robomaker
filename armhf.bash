@@ -1,4 +1,5 @@
-#!/usr/bin/env sh
+#!/bin/bash
+. /opt/ros/kinetic/setup.bash
 cd ws/robot_ws
 apt update
 rosdep install --from-paths src --ignore-src -r -y

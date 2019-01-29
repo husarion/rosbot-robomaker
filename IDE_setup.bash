@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 if [ $# -eq 2 ]
 then
@@ -30,7 +30,7 @@ done
 
 # build X86_64 architecture
 cd ~/environment/RoboMakerROSbotProject/robot_ws
-. /opt/ros/kinetic/setup.sh
+. /opt/ros/kinetic/setup.bash
 rosdep install --from-paths src --ignore-src -r -y
 colcon build
 colcon bundle
@@ -51,7 +51,7 @@ docker rm $(docker ps -aq)
 cd ~/environment/RoboMakerROSbotProject
 CONTAINER_ID=$(sudo docker run -v $(pwd):/ws -dt ros-cross-compile:armhf)
 echo "Cross compile started with ID: " $CONTAINER_ID
-docker exec $CONTAINER_ID  ws/armhf.sh
+docker exec $CONTAINER_ID ws/armhf.bash
 
 # copy armhf bundle to S3 bucket
 cd ~/environment/RoboMakerROSbotProject
