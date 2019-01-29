@@ -22,6 +22,17 @@ git submodule update --recursive --remote
 cd ~/environment/RoboMakerROSbotProject/
 python configure_project.py --bucket $BUCKET_NAME --iam $IAM_ROLE
 
+# build X86_64 architecture
+cd ~/environment/RoboMakerROSbotProject/robot_ws
+source /opt/ros/kinetic/setup.bash
+rosdep install --from-paths src --ignore-src -r -y
+colcon build
+colcon bundle
+
+# copy X86_64 bundle to S3 bucket
+cd ~/environment/RoboMakerROSbotProject
+aws s3 cp robot_ws/bundle/output.tar.gz s3://$BUCKET_NAME/RoboMakerROSbotProject/robot_ws/bundle/output.tar.gz
+
 # prepare docker for armhf compilation
 cd /opt/robomaker/cross-compilation-dockerfile/
 sudo bin/build_image.bash
