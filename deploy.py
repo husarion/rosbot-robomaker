@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import boto3
 import sys
 import argparse
@@ -125,20 +126,79 @@ def create_deployment(robomaker, fleet_arn, app_arn, app_ver, tutorial_number):
     print(response)
 
 
-def add_armhf_to_app(robomaker, app_arn):
-    response = robomaker.describe_robot_application(
+def add_armhf_to_app(robomaker, app_arn, bucket_id, prefix):
+    describe_robot_application_response = robomaker.describe_robot_application(
         application=app_arn
+        )
+    print('Will update robot application with')
+    print('Name: ' + describe_robot_application_response.get('name'))
+    sources_list = []
+    for source in describe_robot_application_response.get('sources'):
+        s = OrderedDict([
+            ('s3Bucket', source.get('s3Bucket')),
+            ('s3Key', source.get('s3Key')),
+            ('architecture', source.get('architecture'))
+        ])
+        sources_list.append(s)
+        print('Source:')
+        print('    s3Bucket: ' + source.get('s3Bucket'))
+        print('    s3Key: ' + source.get('s3Key'))
+        print('    architecture: ' + source.get('architecture'))
+
+    armhf_source = OrderedDict([
+        ('s3Bucket', bucket_id),
+        ('s3Key', prefix+'/output.armhf.tar.gz'),
+        ('architecture', 'ARMHF')
+    ])
+    sources_list.append(armhf_source)
+
+    print('Sources list contain ' + str(len(sources_list)) + ' objects')
+
+    update_robot_application_response = robomaker.update_robot_application(
+        application=app_arn,
+        sources=sources_list,
+        robotSoftwareSuite={
+            'name': 'ROS',
+            'version': 'Kinetic'
+        }
     )
-    print(response)
     return
 
 
-def start_deployment(tutorial_number, user_fleet_name, user_robot_name):
+def create_robot_app(robomaker, app_name, bucket, prefix):
+    sources_list = []
+
+    x86_64_source = OrderedDict([
+        ('s3Bucket', bucket),
+        ('s3Key', prefix+'/output.tar.gz'),
+        ('architecture', 'X86_64')
+    ])
+    sources_list.append(x86_64_source)
+
+    armhf_source = OrderedDict([
+        ('s3Bucket', bucket),
+        ('s3Key', prefix+'/output.armhf.tar.gz'),
+        ('architecture', 'ARMHF')
+    ])
+    sources_list.append(armhf_source)
+    create_robot_application_response = robomaker.create_robot_application(
+        name=app_name,
+        sources=sources_list,
+        robotSoftwareSuite={
+            'name': 'ROS',
+            'version': 'Kinetic'
+        }
+    )
+    return create_robot_application_response.get('arn')
+
+
+def start_deployment(tutorial_number, user_fleet_name, user_robot_name, s3bucket):
     # Begin working with robomaker
     print("Init robomaker")
     robomaker_client = boto3.client('robomaker')
     fleet_arn = get_fleet_arn(robomaker_client, user_fleet_name)
     response = robomaker_client.describe_fleet(fleet=fleet_arn)
+    app_key_prefix = 'RoboMakerROSbotProject/robot_ws/bundle'
     print('Clean fleet')
     for robot in response.get('robots'):
         deregister_robot_response = robomaker_client.deregister_robot(
@@ -154,7 +214,12 @@ def start_deployment(tutorial_number, user_fleet_name, user_robot_name):
         return None
     application_arn = get_robot_application_arn(
         robomaker_client, 'RoboMakerROSbotTutorialRobot')
-    add_armhf_to_app(robomaker_client, application_arn)
+    if application_arn:
+        add_armhf_to_app(robomaker_client, application_arn,
+                         s3bucket, app_key_prefix)
+    else:
+        application_arn = create_robot_app(
+            robomaker_client, 'RoboMakerROSbotTutorialRobot', s3bucket, app_key_prefix)
     app_version = get_current_application_version(
         robomaker_client, application_arn)
     create_deployment(robomaker_client, fleet_arn,
@@ -165,11 +230,16 @@ if __name__ == "__main__":
     tutorial_num = 8
     robot_name = ''
     fleet_name = ''
+    bucket_name = ''
     parser = argparse.ArgumentParser()
+    parser.add_argument("bucket", help="Bucket where app bundles are stored, required")
     parser.add_argument("--tutorial", help="Number of tutorial to be used for deployment, default is 8", type=int)
     parser.add_argument("--fleet", help="Fleet name to be used, default is ROSbotFleet")
     parser.add_argument("--robot", help="Robot name to be used, default is ROSbot")
     args = parser.parse_args()
+
+    bucket_name = args.bucket
+
     if args.tutorial:
         tutorial_num = args.tutorial
     else:
@@ -184,5 +254,5 @@ if __name__ == "__main__":
         robot_name = args.robot
     else:
         robot_name = 'ROSbot'
-        
-    start_deployment(tutorial_num, fleet_name, robot_name)
+
+    start_deployment(tutorial_num, fleet_name, robot_name, bucket_name)
