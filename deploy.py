@@ -232,10 +232,14 @@ if __name__ == "__main__":
     fleet_name = ''
     bucket_name = ''
     parser = argparse.ArgumentParser()
-    parser.add_argument("bucket", help="Bucket where app bundles are stored, required")
-    parser.add_argument("--tutorial", help="Number of tutorial to be used for deployment, default is 8", type=int)
-    parser.add_argument("--fleet", help="Fleet name to be used, default is ROSbotFleet")
-    parser.add_argument("--robot", help="Robot name to be used, default is ROSbot")
+    parser.add_argument(
+        "bucket", help="Bucket where app bundles are stored, required")
+    parser.add_argument(
+        "--tutorial", help="Number of tutorial to be used for deployment, default is 8", type=int)
+    parser.add_argument(
+        "--fleet", help="Fleet name to be used, default is ROSbotFleet")
+    parser.add_argument(
+        "--robot", help="Robot name to be used, default is ROSbot")
     args = parser.parse_args()
 
     bucket_name = args.bucket
