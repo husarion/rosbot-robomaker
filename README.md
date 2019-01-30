@@ -7,6 +7,13 @@ Using Greengrass on ROSbot requires to follow some guides locates on varous plac
 
 ## Prerequisites
 
+ROSbot need some system modifications to allow Greengrass to run. Copy the `setup_ROSbot_for_gg.sh` file to your ROSbot and run it as root:
+```
+wget https://raw.githubusercontent.com/lukaszmitka/RoboMakerROSbotProject/master/setup_ROSbot_for_gg.sh
+chmod a+x setup_ROSbot_for_gg.sh 
+sudo ./setup_ROSbot_for_gg.sh
+```
+
 You will need RoboMaker development environmet, if you do not have it yet create it according to [Create a development environment](https://docs.aws.amazon.com/robomaker/latest/dg/gs-build.html?shortFooter=true#gs-build-createide) manual.
 
 You will also need S3 bucket and IAM role prepared for simulations.
