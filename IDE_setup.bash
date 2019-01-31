@@ -33,7 +33,7 @@ cd ~/environment/RoboMakerROSbotProject/robot_ws
 . /opt/ros/kinetic/setup.bash
 rosdep install --from-paths src --ignore-src -r -y
 colcon build
-colcon bundle
+colcon bundle --apt-package-blacklist rosbot.blacklist
 
 # copy X86_64 bundle to S3 bucket
 cd ~/environment/RoboMakerROSbotProject
