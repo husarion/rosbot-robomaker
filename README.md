@@ -9,19 +9,42 @@ Using Greengrass on ROSbot requires to follow some guides locates on varous plac
 
 You will need S3 bucket to store your application bundles. To create S3 bucket:
 - Sign in to [AWS S3 console](https://console.aws.amazon.com/s3/)
+
+![S3 login](images/aws_tutorial_s3_1.png)
+
 - Choose **Create bucket**
 - In field **Bucket name** type DNS style name like `yourusername-bucket-robomaker` (it must be unique accross all names in Amazon S3, do not use `_` and `.` in the name)- From **Region dropdown** menu choose entry appropriate to your localization.
+
+![S3 create bucket](images/aws_tutorial_s3_2.png)
+
 - Proceed through creator, do not modify default values.
-- When you create bucket, open it, by clicking its name, it should be empty now. 
-- Note the bucket name, you will need it later.
+
+![S3 bucket summary](images/aws_tutorial_s3_3.png)
+
+
+- When you create bucket, you will be redirected to bucket list view. Find the bucket you just created and click bucket icon next to it name, you will see bucket properties.
+
+![S3 bucket name](images/aws_tutorial_s3_4.png)
+
+- Note the bucket name, you will need it later. We will refer to it as `<BUCKET_NAME>`.
+- Click button **Copy bucket ARN**, this will copy bucket identifier to your clipboard. Paste it to text editor, it should be string similair to `arn:aws:s3:::husarion-bucket-robomaker`. We will refer to it as `<BUCKET_ARN>`.
 - Close the S3 console
 
 #### Creating an IAM role for RoboMaker instance
 
 You will need an IAM role to allow RoboMaker interact with other AWS services. To create IAM role:
 - sign in to [AWS IAM console](https://console.aws.amazon.com/iam/)
+
+![IAM login](images/aws_tutorial_iam_1.png)
+
 - On the left panel choose **Roles**
+
+![IAM roles](images/aws_tutorial_iam_2.png)
+
 - Click **Create role**
+
+![IAM create role](images/aws_tutorial_iam_3.png)
+
 - From **Select type of trusted entity** menu select **AWS Service**
 - From **Choose the service that will use this role** menu choose **EC2** 
 - Proceed with **Next: Permissions** button
@@ -30,21 +53,42 @@ You will need an IAM role to allow RoboMaker interact with other AWS services. T
     - AWSRoboMakerFullAccess
     - AmazonS3FullAccess
 
+![IAM create role](images/aws_tutorial_iam_4.png)
+
 - Proceed with **Next: Tags** and **Next: Review**.
     - In field **Role name** type `robomaker_role`.
     - In **Role description** type `Allows RoboMaker instances to call AWS services on your behalf.`.
     - Make sure that in **Policies** section you have three entries.
+
+![IAM choose policy](images/aws_tutorial_iam_7.png)
+
 - Proceed with **Create role**, you will be redirected to **Roles** view.
+
+![IAM roles list](images/aws_tutorial_iam_8.png)
+
 - Open role setting by clicking its name and choose tab **Trust relationships**. 
+
+![IAM trust relationships](images/aws_tutorial_iam_9.png)
+
 - Click button **Edit trust relationships** and edit policy document, find entry `ec2.amazonaws.com` and change it to `robomaker.amazonaws.com`.
+
+![IAM trust relationships](images/aws_tutorial_iam_10.png)
+
 - Click **Update trust policy** button. 
-- Note the `Role ARN` entry, this will be required later.
+
+![IAM role summary](images/aws_tutorial_iam_11.png)
+
+- Note the `Role ARN` entry, this will be required later. We will refer to it as `<IAM_ROLE_FOR_ROBOMAKER>`.
 
 #### Creating an IAM role for application deployment
 
 Greengrass will need an IAM role to interact with other AWS S3 service during deployment. To create the role:
 - sign in to [AWS IAM console](https://console.aws.amazon.com/iam/)
-- On the left, choose **Policies**, then choose **Create policy**. Choose **JSON** tab and paste the code below. You will need to replace the `arn:aws:s3:::yourusername-bucket-robomaker` string with **ARN** of bucket that you created in first step:
+- On the left, choose **Policies**, then choose **Create policy**.
+
+![IAM create policy](images/aws_tutorial_iam_12.png)
+
+- Choose **JSON** tab and paste the code below. You will need to replace the `<BUCKET_ARN>` string with **ARN** of bucket that you created in first step:
 ```
 {
     "Version": "2012-10-17",
@@ -62,22 +106,46 @@ Greengrass will need an IAM role to interact with other AWS S3 service during de
                 "s3:List*",
                 "s3:Get*"
             ],
-            "Resource": ["arn:aws:s3:::yourusername-bucket-robomaker/*"]
+            "Resource": ["<BUCKET_ARN>/*"]
         }
     ]
 }
-``` 
+```
+
+![IAM policy json](images/aws_tutorial_iam_13.png)
+
 - Proceed with **Review policy**.
-- In **Name** field type 'ROSbot-deployment-policy'
-- In **Description** field type 'Allow GreenGrass to deploy ROboMaker apps to ROSbot.'
-- Choose **Create policy**. 
-- Choose **Roles** and then choose **Create role**.
+- In **Name** field type `ROSbot-deployment-policy`
+- In **Description** field type `Allow GreenGrass to deploy RoboMaker apps to ROSbot.`
+
+![IAM reviev policy](images/aws_tutorial_iam_14.png)
+
+- Choose **Create policy**. You will be redirected to policies list.
+
+![IAM policy created](images/aws_tutorial_iam_15.png)
+
+- From the left panel, choose **Roles** and then choose **Create role**.
 - In **Choose the service that will use this role** list find **Greengrass** and then choose **Next: Permissions**.
+
+![IAM create role](images/aws_tutorial_iam_16.png)
+
 - In the **Permissions** page, select the policy `ROSbot-deployment-policy`. You can use filter to find it.
+
+![IAM role permissions](images/aws_tutorial_iam_17.png)
+
 - Proceed with **Next: Tags** and **Next: Review**.
 - In the **Review** page, type `ROSbot-deployment-role` in a **Role name** field.
+
+![IAM role summary](images/aws_tutorial_iam_18.png)
+
 - Proceed with **Create role**.
+
+![IAM role created](images/aws_tutorial_iam_19.png)
+
 - Select the created role by clicking its name, then select the **Trust relationships** tab.
+
+![IAM role trust relationships](images/aws_tutorial_iam_20.png)
+
 - Select **Edit trust relationship**.
 - In **Policy document** field update with:
 ```
@@ -97,6 +165,9 @@ Greengrass will need an IAM role to interact with other AWS S3 service during de
   ]
 }
 ```
+
+![IAM role trust relationships](images/aws_tutorial_iam_21.png)
+
 - Select **Update Trust Policy**.
 - Close the IAM console
 
