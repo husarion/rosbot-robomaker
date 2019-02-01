@@ -103,7 +103,7 @@ Greengrass will need an IAM role to interact with other AWS S3 service during de
 #### ROSbot setup in RoboMaker
 
 ROSbot need some system modifications before Greengrass will be able to run and deploy applications. To configure ROSbot:
-- sign in to the AWS RoboMaker [console]
+- sign in to the AWS RoboMaker [console](https://console.aws.amazon.com/robomaker/)
 - In the left navigation pane, choose **Fleet Management** and then choose **Robots**.
 - Choose **Create robot*.
 - In the **Name** field, type `ROSbot`.
