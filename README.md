@@ -176,15 +176,31 @@ Greengrass will need an IAM role to interact with other AWS S3 service during de
 ROSbot need some system modifications before Greengrass will be able to run and deploy applications. To configure ROSbot:
 - sign in to the AWS RoboMaker [console](https://console.aws.amazon.com/robomaker/)
 - In the left navigation pane, choose **Fleet Management** and then choose **Robots**.
+
+![RoboMaker robots](images/aws_tutorial_robomaker_1.png)
+
 - Choose **Create robot*.
 - In the **Name** field, type `ROSbot`.
 - From the **Architecture** dropdown menu choose **ARMHF**.
 - From the **AWS Greengrass group** dropdown menu choose **Create new**.
 - In the **AWS Greengrass prefix** field type `ROSbot`
 - In the **IAM role** select **ROSbot-deployment-role**
+
+![RoboMaker create robot](images/aws_tutorial_robomaker_2.png)
+
 - Proceed with **Create**, you will be redirected to **Download your Core device** page.
+
+![RoboMaker robot created](images/aws_tutorial_robomaker_3.png)
+
+
 - Choose **Download** button next to **Download and store your Core's security resources**
-- You will get `ROSbot-setup.zip` file
+
+- You will get `ROSbot-setup.zip` file, navigate to directory where it is downloaded, by default it should be `~/Downloads`
+
+```
+cd ~/Downloads
+```
+
 - Copy the file to your ROSbot:
 ```
 scp ROSbot-setup.zip husarion@ROSBOT_IP:ROSbot-setup.zip
@@ -194,16 +210,22 @@ scp ROSbot-setup.zip husarion@ROSBOT_IP:ROSbot-setup.zip
 
 You will need to make some system configurations on device, connect to your ROSbot through `ssh` or remote desktop and open terminal:
 
-- Unzip ROSbot security resources:
-```
-sudo unzip RobotName-setup.zip -d /greengrass
-```
 - Copy the `setup_ROSbot_for_gg.sh` file to your ROSbot and run it as root:
+
 ```
 wget https://raw.githubusercontent.com/lukaszmitka/RoboMakerROSbotProject/master/setup_ROSbot_for_gg.sh
 chmod a+x setup_ROSbot_for_gg.sh
 sudo ./setup_ROSbot_for_gg.sh
 ```
+
+
+- Unzip ROSbot security resources:
+
+```
+cd ~
+sudo unzip ROSbot-setup.zip -d /greengrass
+```
+
 - Start the GreenGrass:
 ```
 sudo /greengrass/ggc/core/greengrassd start
@@ -214,22 +236,42 @@ sudo /greengrass/ggc/core/greengrassd start
 
 Application will be built using the RoboMaker environment. To create the IDE:
 - sign in to the AWS RoboMaker [console](https://console.aws.amazon.com/robomaker/home).
+
+![RoboMaker new IDE](images/aws_tutorial_robomaker_4.png)
+
 - On the left, expand **Development**, choose **Development environments**, and then choose **Create environment**.
 - In the Create AWS RoboMaker development environment page, enter `rosbot_env` as the environment name.
 - Accept the default Instance type (`m4.large`). You can select different instances type to improve bundling performance.
 - In **VPC** dropdown list choose the default value.
 - In the **Subnets** dropdown list choose the first subnet. You can select different subnet if necessary.
+
+![RoboMaker create IDE](images/aws_tutorial_robomaker_5.png)
+
 - Choose **Create** to create the AWS Cloud9 development environment.
+
+![RoboMaker IDE ready](images/aws_tutorial_robomaker_6.png)
+
 
 #### Deploying the application
 
+To deploy application, you will use RoboMaker environment created in previous step:
+
+- Go to AWS RoboMaker home [console](https://console.aws.amazon.com/robomaker/home).
+
 - On the left, expand **Development**, choose **Development environments**, and then choose `rosbot_env`
+
 - Open the development environmet with **Open environment** button.
-- In the IDE, go to bash tab and clone this repository in `~/environment/` directory:
+
+![RoboMaker open IDE](images/aws_tutorial_robomaker_8.png)
+
+- In the IDE, go to bash tab and clone the `RoboMakerROSbotProject` repository in `~/environment/` directory:
+
 ```
 cd ~/environment/
 git clone --recurse-submodules https://github.com/lukaszmitka/RoboMakerROSbotProject.git
 ```
+
+![RoboMaker open IDE](images/aws_tutorial_robomaker_10.png)
 
 - Start the configuration script. You need to provide bucket name and ARN of IAM role that you created for RoboMaker instance:
 
@@ -237,6 +279,8 @@ git clone --recurse-submodules https://github.com/lukaszmitka/RoboMakerROSbotPro
 cd ~/environment/RoboMakerROSbotProject/
 ./IDE_setup.bash <BUCKET_NAME> <IAM_ROLE_FOR_ROBOMAKER>
 ```
+
+![RoboMaker open IDE](images/aws_tutorial_robomaker_11.png)
 
 The script will install all dependencies, configure project, build and set the deployment job.
 
