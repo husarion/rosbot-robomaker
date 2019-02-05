@@ -3,7 +3,7 @@
 This project contains ROSbot model along with launch files required to launch tutorials on [AWS RoboMaker](https://aws.amazon.com/robomaker/) and deploy them to ROSbot with use of Greengrass.
 Currently, tutorials 6, 7 and 8 are tested, other tutorials will be added soon.
 
-Using Greengrass on ROSbot requires to follow some guides locates on varous places and making manual system modifiactions. We are working on making the process smooth and easy, stay tuned!
+Using Greengrass on ROSbot requires to follow some guides located in various places and making manual system modifiactions. We are working on making the process smooth and easy, stay tuned!
 
 #### Creating S3 Bucket
 
