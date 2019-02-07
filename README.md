@@ -1,4 +1,142 @@
-# RoboMaker ROSbot project
+# ROSbot - quick start #
+
+ROSbot 2.0 and ROSbot 2.0 PRO are autonomous, open source robot platforms running on CORE2-ROS controller. It can be used as a learning platform for Robot Operating System as well as a base for a variety of robotic applications like inspection robots, custom service robots etc.
+
+## Unboxing ##
+
+What's in the box:
+
+* carrying case
+* ROSbot 2.0 (with optional 3D camera and LiDAR already assembled)
+* Wi-Fi 2.4GHz antenna
+* 3x 18650 Li-Ion reachargeable batteries
+* universal charger with power adapter
+* charging cable
+* microSD card with the software for ROSbot
+* USB to Ethernet adapter
+
+<div><center><img src="https://raw.githubusercontent.com/husarion/static_docs/master/src/assets/img/howToStart/ROSbot_unboxing.jpg"/></center></div>
+
+## Rear panel discription ##
+
+In description below we will use names of elements from rear panel of ROSbot. You can check all this names on this image. 
+
+![image](/images/ROSbot2_rear_panel.png)
+
+## Assembly ##
+
+Your ROSbot is assembled, but to get it ready to work, you need to provide a power supply and attach the antenna. 
+
+To mount batteries:
+
+* turn ROSbot upside down
+![image](/images/assembly_1.JPG)
+* unscrew battery cover mounted with two screws
+![image](/images/assembly_2.JPG)
+* remove the battery cover
+![image](/images/assembly_3.JPG)
+* place batteries accordingly to the symbols, keeping the black strip under the batteries
+![image](/images/assembly_4.JPG)
+* place batery cover and mount it with screws
+![image](/images/assembly_1.JPG)
+
+## Quick start charging guide ##
+
+1. Connect the power adapter to the charger and the output cable between charger and ROSbot (2 connectors on charger side, 1 black connector to ROSbot charging port).
+
+![image](/images/charger_1.JPG)
+![image](/images/charger_2.JPG)
+
+After this step your charger should look like this:
+
+![image](/images/charger_3.JPG)
+
+2. Use first and second buttons to select “LiPo BATT” mode and press [Start] button.
+3. Use arrows to select “LiPo CHARGE” mode.
+4. Press [Start] - the current value should start blinking. Use arrows to set the current to 1.5A. 
+5. Press [Start] again - the voltage value should start blinking. Select “11.1V(3S)” using arrows.
+6. Press and hold [Start] for 2 seconds. The charger should now ask for confirmation. Press [Start] again. The charging process should begin now.
+7. When the charging will be finished (after about 3 hours), the charger will generate a loud “beep” sound and will finish charging at the same time.
+
+The picture below should help you to go through these steps.
+
+![image](/images/charging.png)
+
+To attach the antenna, screw it to the antenna connector on the ROSbot rear panel.
+
+![image](/images/antenna_1.JPG)
+
+After assembly it should look like this.
+
+![image](/images/antenna_2.JPG)
+
+## Connecting to the cloud ##
+
+Now we show you how to connect your controller to [Husarion Cloud](https://cloud.husarion.com). Before you start using platform you will need to register your own account on [Husarion Cloud](https://cloud.husarion.com). We will describe all three in great detail. 
+
+### Connecting using mobile device and browser ###
+
+Before you perform the next steps, install the hConfig mobile application on your smartphone or tablet:
+* [Google Play](https://play.google.com/store/apps/details?id=com.husarion.configtool2&hl=en)
+* [AppStore](https://itunes.apple.com/us/app/hconfig/id1283536270?mt=8)
+
+1\. Open the hConfig app on your smartphone and follow the wizard that will show you how to connect CORE2 to your Wi-Fi network and your Husarion cloud account. The phone is required only once for configuration and connecting CORE2 with cloud, later you will not be using it. After you select the Wi-Fi network for your CORE2 in the hConfig app, you can proceed to the next steps.
+
+The WiFi bradcasted by CORE2 can be used only for configuration, it does not allow to connect to the internet. Your phone may show warning regarding no internet connection while connected to this WiFi. You can ignore these warnings, as this will not interrupt the process.
+
+<b>For Android users: turn off mobile internet on your smartphone while using hConfig app </b>
+
+2\. hConfig app will ask you to add a new device. Open https://cloud.husarion.com in your browser and sign in.
+
+![image](/images/1_signin.png)
+
+3\. Click "Add new device".
+
+![image](/images/2_addNewDevice.png)
+
+4\. Enter a name for your CORE2 powered device.
+
+![image](/images/3_enterName.png)
+
+5\. Scan QR code using the hConfig app.
+
+![image](/images/4_scanQr.png)
+
+6\. Well done! You just added your first device to the cloud!
+
+![image](/images/5_devAdded.png)
+
+## Programming ##
+
+First you will program the Core2 part:
+
+*Click "+" next to your device name and sellect "IDE".
+
+![image](/images/6_openWebIDE.png)
+
+Click "Create" button to open new project wizard.
+
+![image](/images/7_createNewProj.png)
+
+Select CORE2 board, chose HowToStart project template and enter name, eg. myFirstProject, and click "Create project" button.
+
+![image](/images/8_projSettings.png)
+
+This is a web Integrated Development Environment in which you can write a firmware for your device, and upload the firmware through the Internet.
+
+![image](/images/9_webIDEmain.png)
+
+Click "&lt;none&gt;" next to "selected device" and select "myFirstDev" device.
+
+![image](/images/10_webIDEselectDev.png)
+
+Click a button with a "cloud with arrow" to upload new firmware to your device. Well done! now you can check how your first program works.
+
+![image](/images/11_webIDEprogram.png)
+
+In the previous step you have uploaded the firmware into your CORE2. Let's check how it works!<br/>
+
+# RoboMaker ROSbot project #
 
 This project contains ROSbot model along with launch files required to launch tutorials on [AWS RoboMaker](https://aws.amazon.com/robomaker/) and deploy them to ROSbot with use of Greengrass.
 Currently, tutorials 6, 7 and 8 are tested, other tutorials will be added soon.
