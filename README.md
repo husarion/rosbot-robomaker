@@ -31,13 +31,13 @@ To mount the batteries follow these steps:
 
 * turn ROSbot upside down
 * unscrew battery cover mounted with two screws
-![image](/images/assembly_2.png)
+![image](/images/assembly_2.jpg)
 * remove the battery cover
-![image](/images/assembly_3.png)
+![image](/images/assembly_3.jpg)
 * place batteries accordingly to the symbols, keeping the black strip under the batteries
-![image](/images/assembly_4.JPG)
+![image](/images/assembly_4.jpg)
 * place batery cover and mount it with screws
-![image](/images/assembly_1.png)
+![image](/images/assembly_1.jpg)
 
 ## Quick start charging guide ##
 
@@ -106,7 +106,7 @@ The WiFi bradcasted by CORE2 controller can be used only for configuration, it d
 
 ![image](/images/5_devAdded.png)
 
-## Programming ##
+## Programming a firmware ##
 
 First you will program the ROSbot:
 
