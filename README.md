@@ -63,11 +63,11 @@ The picture below is a visualization of the mentioned steps.
 
 To attach the antenna, screw it to the antenna connector on the ROSbot rear panel.
 
-![image](/images/antenna_1.JPG)
+![image](/images/antenna_1.jpg)
 
 After assembly it should look like this.
 
-![image](/images/antenna_2.JPG)
+![image](/images/antenna_2.jpg)
 
 ## Connecting to the cloud ##
 
