@@ -383,7 +383,33 @@ When the transfer is finished, close the window.
 
 #### ROSbot setup on device 
 
-You will need to make some system configurations on device, connect to your ROSbot through `ssh` or remote desktop and open terminal:
+You will need to make some system configurations on device. Depending on your host system, you can connect to your ROSbot with different methods:
+
+##### On Linux
+
+Open terminal and start `ssh` connection, you will need to substitute `ROSBOT_IP` with device address you noted earlier:
+
+```
+ssh husarion@ROSBOT_IP
+```
+
+Proceed to **Device setup** section.
+
+##### On Windows
+
+Press `WinKey` + `r` then type `mstsc`.
+
+You will see a window appear:
+
+![Windows RDP](images/win_rdp.png)
+
+Type in your device IP address and click connect.
+
+You will see the ROSbot desktop, from the top menu, choose the `Applications` -> `Terminal`.
+
+##### Device setup
+
+In the terminal execute below commands:
 
 - Copy the `setup_ROSbot_for_gg.sh` file to your ROSbot and run it as root:
 
