@@ -110,7 +110,7 @@ The WiFi bradcasted by CORE2 controller can be used only for configuration, it d
 
 First you will program the ROSbot:
 
-*Click "+" next to your device name and sellect "IDE".
+Click "+" next to your device name and select "IDE".
 
 ![image](/images/6_openWebIDE.png)
 
