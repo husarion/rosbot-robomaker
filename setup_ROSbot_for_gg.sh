@@ -41,8 +41,8 @@ if ! grep -q 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt; then
     echo $LINE > /boot/cmdline.txt
 fi
 
-wget https://d1onfpft10uf5o.cloudfront.net/greengrass-core/downloads/1.7.0/greengrass-linux-armv7l-1.7.0.tar.gz
-tar -zxvf greengrass-linux-armv7l-1.7.0.tar.gz -C /
+wget https://d1onfpft10uf5o.cloudfront.net/greengrass-core/downloads/1.7.1/greengrass-linux-armv7l-1.7.1.tar.gz
+tar -zxvf greengrass-linux-armv7l-1.7.1.tar.gz -C /
 
 cd /greengrass/certs
 wget -O root.ca.pem http://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
