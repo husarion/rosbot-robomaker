@@ -340,16 +340,46 @@ ROSbot need some system modifications before Greengrass will be able to run and 
 
 - Choose **Download** button next to **Download and store your Core's security resources**
 
-- You will get `ROSbot-setup.zip` file, navigate to directory where it is downloaded, by default it should be `~/Downloads`
+- You will get `ROSbot-setup.zip` file, it need to be uploaded to ROSbot. The upload process will vary, depending on your host operating system.
+
+##### On Linux
+
+Navigate to directory where the file is downloaded, by default it should be `~/Downloads`
 
 ```
 cd ~/Downloads
 ```
 
-- Copy the file to your ROSbot:
+- Copy the file to your ROSbot, you will need to substitute `ROSBOT_IP` withdevice address you noted earlier:
+
 ```
 scp ROSbot-setup.zip husarion@ROSBOT_IP:ROSbot-setup.zip
 ```
+
+##### On Windows
+
+You will need an SCP client, download and install [WinSCP](https://winscp.net/eng/download.php).
+
+Start WinSCP, you will see the login dialog:
+
+![WinSCP login](images/winscp1.png)
+
+- From `File protocol` dropdown menu choose: `SFTP`.
+- In `Host name` field provide rosbot IP address that you noted earlier, it is the value which we described as `ROSBOT_IP`.
+- In `Port number` field provide `22`.
+- In `User name` field provide `husarion`.
+- In `Password` field provide `husarion`.
+
+When all fields are filled up,  click `Login` button to connect, you will see file manager view.
+
+![WinSCP file manager](images/winscp2.png)
+
+In the left tab navigate to directory where you downloaded the ROSbot-setup.zip file. In the right tab navigate to `/home/husarion` directory.
+
+Drag and drop the `ROSbot-setup.zip` to the right tab.
+
+When the transfer is finished, close the window.
+
 
 #### ROSbot setup on device 
 
