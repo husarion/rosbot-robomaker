@@ -350,7 +350,7 @@ Navigate to directory where the file is downloaded, by default it should be `~/D
 cd ~/Downloads
 ```
 
-- Copy the file to your ROSbot, you will need to substitute `ROSBOT_IP` withdevice address you noted earlier:
+- Copy the file to your ROSbot, you will need to substitute `ROSBOT_IP` with device address you noted earlier:
 
 ```
 scp ROSbot-setup.zip husarion@ROSBOT_IP:ROSbot-setup.zip
