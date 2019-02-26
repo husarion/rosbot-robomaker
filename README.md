@@ -274,7 +274,7 @@ Greengrass will need an IAM role to interact with other AWS S3 service during de
 
 ![IAM create role](images/aws_tutorial_iam_16.png)
 
-- In the **Permissions** page, select the policy `ROSbot-deployment-policy`. You can use filter to find it.
+- In the **Permissions** page, select the policy `ROSbot-deployment-policy` and `AWSGreengrassResourceAccessRolePolicy`. You can use filter to find it.
 
 ![IAM role permissions](images/aws_tutorial_iam_17.png)
 
@@ -302,6 +302,7 @@ Greengrass will need an IAM role to interact with other AWS S3 service during de
       "Principal": {
         "Service": [
           "lambda.amazonaws.com",
+          "iot.amazonaws.com",
           "greengrass.amazonaws.com"
         ]
       },
@@ -314,6 +315,7 @@ Greengrass will need an IAM role to interact with other AWS S3 service during de
 ![IAM role trust relationships](images/aws_tutorial_iam_21.png)
 
 - Select **Update Trust Policy**.
+- Note the role ARN, we will refer to it as `DEPLOYMENT_ROLE_ARN`.
 - Close the IAM console
 
 #### ROSbot setup in RoboMaker
@@ -478,7 +480,7 @@ git clone --recurse-submodules https://github.com/lukaszmitka/RoboMakerROSbotPro
 
 ```
 cd ~/environment/RoboMakerROSbotProject/
-./IDE_setup.bash <BUCKET_NAME> <IAM_ROLE_FOR_ROBOMAKER>
+./IDE_setup.bash <BUCKET_NAME> <IAM_ROLE_FOR_ROBOMAKER> <DEPLOYMENT_ROLE_ARN>
 ```
 
 ![RoboMaker open IDE](images/aws_tutorial_robomaker_11.png)

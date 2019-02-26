@@ -1,11 +1,13 @@
 #!/bin/bash
 
-if [ $# -eq 2 ]
+if [ $# -eq 3 ]
 then
     BUCKET_NAME="$1"
     IAM_ROLE="$2"
+    DEPLOYMENT_ROLE_ARN="$3"
     echo "Bucket name is " $BUCKET_NAME
     echo "IAM role is " $IAM_ROLE
+    echo "Deployment role ARN is " $DEPLOYMENT_ROLE_ARN
 else
     echo "Please run this script with two arguments"
     echo "./IDE_setup.sh BUCKET_NAME IAM_ROLE"
@@ -18,6 +20,8 @@ pip install boto3
 # update the submodules
 cd ~/environment/RoboMakerROSbotProject
 git submodule update --recursive --remote
+
+aws greengrass associate-service-role-to-account --role-arn $DEPLOYMENT_ROLE_ARN
 
 # configure project
 cd ~/environment/RoboMakerROSbotProject/
