@@ -106,6 +106,16 @@ The WiFi bradcasted by CORE2 controller can be used only for configuration, it d
 
 ![image](/images/5_devAdded.png)
 
+## Getting the device IP
+
+Click "+" next to your device name and select "IDE".
+
+![image](/images/6_openWebIDE.png)
+
+Click "More" button to open device details view.
+
+Find line `Local IP` and note address provided, we will refer to it later as `ROSBOT_IP`.
+
 ## Programming a firmware ##
 
 First you will program the ROSbot:
