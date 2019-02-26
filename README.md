@@ -136,8 +136,8 @@ In the previous step you have uploaded the firmware into your ROSbot. Let's chec
 
 # RoboMaker ROSbot project #
 
-This project contains ROSbot model along with launch files required to launch tutorials on [AWS RoboMaker](https://aws.amazon.com/robomaker/) and deploy them to ROSbot with use of Greengrass.
-Currently, tutorials 6, 7 and 8 are tested, other tutorials will be added soon.
+This project contains ROSbot model along with launch files required to launch [Husarion ROS tutorials](https://husarion.com/tutorials/) on [AWS RoboMaker](https://aws.amazon.com/robomaker/) and deploy them to ROSbot with use of Greengrass.
+Currently, tutorials [6 - SLAM navigation](https://husarion.com/tutorials/ros-tutorials/6-slam-navigation/), [7 - Path planning](https://husarion.com/tutorials/ros-tutorials/7-path-planning/) and [8 - Unknown environment exploration](https://husarion.com/tutorials/ros-tutorials/8-unknown-environment-exploration/) are tested, other tutorials will be added soon.
 
 Using Greengrass on ROSbot requires to follow some guides located in various places and making manual system modifiactions. We are working on making the process smooth and easy, stay tuned!
 
