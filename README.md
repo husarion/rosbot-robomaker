@@ -486,3 +486,11 @@ cd ~/environment/RoboMakerROSbotProject/
 ![RoboMaker open IDE](images/aws_tutorial_robomaker_11.png)
 
 The script will install all dependencies, configure project, build and set the deployment job.
+
+When the script is done with its job, you can observe the deployment process:
+- sign in to the AWS RoboMaker [console](https://console.aws.amazon.com/robomaker/)
+- In the left navigation pane, choose **Fleet Management** and then choose **Deployments**.
+- When new deplyment will appear, open it by clicking its name.
+- Wait until deplyment status changes to **Succeed** - ROSbot will start to explore environment.
+
+![RoboMaker open IDE](images/aws_tutorial_robomaker_12.png)
