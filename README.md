@@ -345,11 +345,11 @@ When the script is done with its job, you can observe the deployment process:
 
 ![RoboMaker open IDE](images/aws_tutorial_robomaker_12.png)
 
-#### Viewing the progress
+#### Viewing the results
 
-ROSbot mission is to explore environment, it will drive to any location that is accessible and can not be observed from already visited locations.
+ROSbots mission, after completing this tutorial, is to autonomously explore the environment around it.  It will drive to any location that is accessible and which cannot be observed from the already visited locations. It will create a map of that environment in the process using the data from the A2 LIDAR laser scanner mounted on top of it.
 
-You may observe as ROSbot is building map of the environment. Connect to ROSbot through remote desktop client, this could be `Remote Desktop Connection` on `Windows` or `Remmina` on `Ubuntu`.
+You may observe in real time how ROSbot is building the map. If you’d like to do that connect to ROSbot through a remote desktop client (this could be a `Remote Desktop Connection` on Windows or `Remmina` on Ubuntu).
 
 
 Open terminal witm menu `Applications` -> `Terminal emulation` and execute:
@@ -358,8 +358,10 @@ Open terminal witm menu `Applications` -> `Terminal emulation` and execute:
 rviz -d /tmp/roboMakerDeploymentPackage/opt/install/tutorial_pkg/share/tutorial_pkg/rviz/tutorial_8.rviz
 ```
 
-You will see the Rviz visualization tool with created map and planned trajectory.
+You will see the Rviz visualization tool with created map and a planned trajectory.
 
-Map is considered as complete, when there is no traversable gaps in map boundary.
+You can see an example map being created on the screenshot below.
 
 ![RoboMaker exploration screenshot](images/aws_tutorial_robomaker_13.png)
+
+Map is considered complete, when there is no traversable gaps within the map boundaries.
