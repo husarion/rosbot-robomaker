@@ -344,3 +344,22 @@ When the script is done with its job, you can observe the deployment process:
 - Wait until deplyment status changes to **Succeed** - ROSbot will start to explore environment.
 
 ![RoboMaker open IDE](images/aws_tutorial_robomaker_12.png)
+
+#### Viewing the progress
+
+ROSbot mission is to explore environment, it will drive to any location that is accessible and can not be observed from already visited locations.
+
+You may observe as ROSbot is building map of the environment. Connect to ROSbot through remote desktop client, this could be `Remote Desktop Connection` on `Windows` or `Remmina` on `Ubuntu`.
+
+
+Open terminal witm menu `Applications` -> `Terminal emulation` and execute:
+
+```
+rviz -d /tmp/roboMakerDeploymentPackage/opt/install/tutorial_pkg/share/tutorial_pkg/rviz/tutorial_8.rviz
+```
+
+You will see the Rviz visualization tool with created map and planned trajectory.
+
+Map is considered as complete, when there is no traversable gaps in map boundary.
+
+![RoboMaker exploration screenshot](images/aws_tutorial_robomaker_13.png)
