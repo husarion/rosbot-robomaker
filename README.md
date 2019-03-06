@@ -150,173 +150,23 @@ This project contains ROSbot model along with launch files required to launch [H
 Currently, tutorials [6 - SLAM navigation](https://husarion.com/tutorials/ros-tutorials/6-slam-navigation/), [7 - Path planning](https://husarion.com/tutorials/ros-tutorials/7-path-planning/) and [8 - Unknown environment exploration](https://husarion.com/tutorials/ros-tutorials/8-unknown-environment-exploration/) are tested, other tutorials will be added soon.
 
 
-#### Creating S3 Bucket
+#### Configure AWS Environment
+Before we use AWS RoboMaker to build and deploy the tutorial applications, we must first set up the AWS environment.  To simplify the configuration, we will use AWS CloudFormation.  CloudFormation enables us to use a template file to define the configuration of our environment.  We will use CloudFormation to create a bucket in Amaazon S3, as well as to create the necessary permissions in AWS Identity and Access Manager (IAM) that AWS RoboMaker requires to simulate and deploy our robot appliations.
 
-You will need S3 bucket to store your application bundles. To create S3 bucket:
-- Sign in to [AWS S3 console](https://console.aws.amazon.com/s3/)
+To deploy the template, sign in to the [CloudFormation console](https://console.aws.amazon.com/cloudformation/).  Following the following steps to deploy the template:
+1.  Download the template file from [here](rosbot_tutorial_template.yaml).
+2.  Click the **Create Stack** button.
+3.  Under *Choose a template*, choose *Upload a template to Amazon S3* and click **Choose File**.
+4.  Browse to the rosbot_tutorial_template.yaml file you download in Step 1 above.
+5.  Click **Next**.
+6.  On the next screen, provide a *Stack name*.  This should be something descriptive such as "ROSbot-setup".
+7.  In the *S3BucketName* field, provide a globally-unique name for the S3 bucket that will be created.  This S3 bucket will be used to store your robot application bundles, as well as any logs that your robot may generate during simulation.  Use a name unique to you, such as "&lt;user_id&gt;-rosbot-tutorial".  Replace "&lt;user-id&gt;" with a unique string.
+8.  Choose **Next**.
+9.  On the Options page, leave all defaults and choose **Next**.
+10.  On the Review page, click the checkbox to acknowledge that CloudFormation will create IAM resources on your behalf.
+11.  Click **Create**.
 
-![S3 login](images/aws_tutorial_s3_1.png)
-
-- Choose **Create bucket**
-- In field **Bucket name** type DNS style name like `yourusername-bucket-robomaker` (it must be unique accross all names in Amazon S3, do not use `_` and `.` in the name)- From **Region dropdown** menu choose entry appropriate to your localization.
-
-![S3 create bucket](images/aws_tutorial_s3_2.png)
-
-- Proceed through creator, do not modify default values.
-
-![S3 bucket summary](images/aws_tutorial_s3_3.png)
-
-
-- When you create bucket, you will be redirected to bucket list view. Find the bucket you just created and click bucket icon next to it name, you will see bucket properties.
-
-![S3 bucket name](images/aws_tutorial_s3_4.png)
-
-- Note the bucket name, you will need it later. We will refer to it as `<BUCKET_NAME>`.
-- Click button **Copy bucket ARN**, this will copy bucket identifier to your clipboard. Paste it to text editor, it should be string similair to `arn:aws:s3:::husarion-bucket-robomaker`. We will refer to it as `<BUCKET_ARN>`.
-- Close the S3 console
-
-#### Creating an IAM role for RoboMaker instance
-
-You will need an IAM role to allow RoboMaker interact with other AWS services. To create IAM role:
-- sign in to [AWS IAM console](https://console.aws.amazon.com/iam/)
-
-![IAM login](images/aws_tutorial_iam_1.png)
-
-- On the left panel choose **Roles**
-
-![IAM roles](images/aws_tutorial_iam_2.png)
-
-- Click **Create role**
-
-![IAM create role](images/aws_tutorial_iam_3.png)
-
-- From **Select type of trusted entity** menu select **AWS Service**
-- From **Choose the service that will use this role** menu choose **EC2** 
-- Proceed with **Next: Permissions** button
-- In **Attach permissions policies** dialog, add (You can use filter to search for them):
-    - CloudWatchFullAccess
-    - AWSRoboMakerFullAccess
-    - AmazonS3FullAccess
-
-![IAM create role](images/aws_tutorial_iam_4.png)
-
-- Proceed with **Next: Tags** and **Next: Review**.
-    - In field **Role name** type `robomaker_role`.
-    - In **Role description** type `Allows RoboMaker instances to call AWS services on your behalf.`.
-    - Make sure that in **Policies** section you have three entries.
-
-![IAM choose policy](images/aws_tutorial_iam_7.png)
-
-- Proceed with **Create role**, you will be redirected to **Roles** view.
-
-![IAM roles list](images/aws_tutorial_iam_8.png)
-
-- Open role setting by clicking its name and choose tab **Trust relationships**. 
-
-![IAM trust relationships](images/aws_tutorial_iam_9.png)
-
-- Click button **Edit trust relationships** and edit policy document, find entry `ec2.amazonaws.com` and change it to `robomaker.amazonaws.com`.
-
-![IAM trust relationships](images/aws_tutorial_iam_10.png)
-
-- Click **Update trust policy** button. 
-
-![IAM role summary](images/aws_tutorial_iam_11.png)
-
-- Note the `Role ARN` entry, this will be required later. We will refer to it as `<IAM_ROLE_FOR_ROBOMAKER>`.
-
-#### Creating an IAM role for application deployment
-
-Greengrass will need an IAM role to interact with other AWS S3 service during deployment. To create the role:
-- sign in to [AWS IAM console](https://console.aws.amazon.com/iam/)
-- On the left, choose **Policies**, then choose **Create policy**.
-
-![IAM create policy](images/aws_tutorial_iam_12.png)
-
-- Choose **JSON** tab and paste the code below. You will need to replace the `<BUCKET_ARN>` string with **ARN** of bucket that you created in first step:
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "robomaker:UpdateRobotDeployment"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:List*",
-                "s3:Get*"
-            ],
-            "Resource": ["<BUCKET_ARN>/*"]
-        }
-    ]
-}
-```
-
-![IAM policy json](images/aws_tutorial_iam_13.png)
-
-- Proceed with **Review policy**.
-- In **Name** field type `ROSbot-deployment-policy`
-- In **Description** field type `Allow GreenGrass to deploy RoboMaker apps to ROSbot.`
-
-![IAM reviev policy](images/aws_tutorial_iam_14.png)
-
-- Choose **Create policy**. You will be redirected to policies list.
-
-![IAM policy created](images/aws_tutorial_iam_15.png)
-
-- From the left panel, choose **Roles** and then choose **Create role**.
-- In **Choose the service that will use this role** list find **Greengrass** and then choose **Next: Permissions**.
-
-![IAM create role](images/aws_tutorial_iam_16.png)
-
-- In the **Permissions** page, select the policy `ROSbot-deployment-policy` and `AWSGreengrassResourceAccessRolePolicy`. You can use filter to find it.
-
-![IAM role permissions](images/aws_tutorial_iam_17.png)
-
-- Proceed with **Next: Tags** and **Next: Review**.
-- In the **Review** page, type `ROSbot-deployment-role` in a **Role name** field.
-
-![IAM role summary](images/aws_tutorial_iam_18.png)
-
-- Proceed with **Create role**.
-
-![IAM role created](images/aws_tutorial_iam_19.png)
-
-- Select the created role by clicking its name, then select the **Trust relationships** tab.
-
-![IAM role trust relationships](images/aws_tutorial_iam_20.png)
-
-- Select **Edit trust relationship**.
-- In **Policy document** field update with:
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": [
-          "lambda.amazonaws.com",
-          "iot.amazonaws.com",
-          "greengrass.amazonaws.com"
-        ]
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-```
-
-![IAM role trust relationships](images/aws_tutorial_iam_21.png)
-
-- Select **Update Trust Policy**.
-- Note the role ARN, we will refer to it as `DEPLOYMENT_ROLE_ARN`.
-- Close the IAM console
+After a few brief minutes, the stack will be created.  When the status has changed to CREATE_COMPLETE, choose the stack you just created, and view its Outputs.  You will see 3 key/value pairs.  You will use these values later in this guide.
 
 #### ROSbot setup in RoboMaker
 
@@ -476,11 +326,11 @@ git clone --recurse-submodules https://github.com/lukaszmitka/RoboMakerROSbotPro
 
 ![RoboMaker open IDE](images/aws_tutorial_robomaker_10.png)
 
-- Start the configuration script. You need to provide bucket name and ARN of IAM role that you created for RoboMaker instance:
+- Start the configuration script. You need to provide the S3 bucket name and the ARNs of the IAM roles that were created by CloudFormation earlier.  The parameters to the script should be set to the corresponding values provided in the output of your CloudFormation stack:
 
 ```
 cd ~/environment/RoboMakerROSbotProject/
-./IDE_setup.bash <BUCKET_NAME> <IAM_ROLE_FOR_ROBOMAKER> <DEPLOYMENT_ROLE_ARN>
+./IDE_setup.bash <S3BucketName> <RoboMakerRole> <ROSbotDeploymentRole>
 ```
 
 ![RoboMaker open IDE](images/aws_tutorial_robomaker_11.png)
