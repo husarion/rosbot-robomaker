@@ -365,3 +365,5 @@ You can see an example map being created on the screenshot below.
 ![RoboMaker exploration screenshot](images/aws_tutorial_robomaker_13.png)
 
 Map is considered complete, when there is no traversable gaps within the map boundaries.
+
+When the map is complete, ROSbot will stop and wait for further commands, it is possible to set a destination point on a map using **`2D Nav Goal`** button in **Rviz**.
