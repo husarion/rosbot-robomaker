@@ -1,0 +1,81 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  S3BucketName:
+    Type: String
+
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref S3BucketName
+
+  RoboMakerRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: robomaker_role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - robomaker.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/CloudWatchFullAccess'
+        - 'arn:aws:iam::aws:policy/AWSRoboMakerFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+
+  ROSbotDeploymentRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: ROSbot-deployment-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - iot.amazonaws.com
+                - greengrass.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSGreengrassResourceAccessRolePolicy'
+      Policies:
+        -
+          PolicyName: ROSbot-deployment-policy
+          PolicyDocument:
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - 'robomaker:UpdateRobotDeployment'
+                Resource:
+                  - '*'
+              -
+                Effect: Allow
+                Action:
+                  - 's3:List*'
+                  - 's3:Get*'
+                Resource: !Join
+                  - '/'
+                  - - !GetAtt S3Bucket.Arn
+                    - '*'
+
+Outputs:
+  S3BucketName:
+    Description: The name of the S3 bucket where your robot bundles will be stored
+    Value: !Ref S3BucketName
+  RoboMakerRole:
+    Description: The ID for the IAM role used by RoboMaker
+    Value: !GetAtt RoboMakerRole.Arn
+  ROSbotDeploymentRole:
+    Description: The ID for the IAM role used to deploy an application to the ROSbot
+    Value: !GetAtt ROSbotDeploymentRole.Arn
