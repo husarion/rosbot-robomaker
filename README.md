@@ -266,7 +266,7 @@ In the terminal execute below commands:
 - Copy the `setup_ROSbot_for_gg.sh` file to your ROSbot and run it as root:
 
 ```
-wget https://raw.githubusercontent.com/lukaszmitka/RoboMakerROSbotProject/master/setup_ROSbot_for_gg.sh
+wget https://raw.githubusercontent.com/husarion/rosbot-robomaker/master/setup_ROSbot_for_gg.sh
 chmod a+x setup_ROSbot_for_gg.sh
 sudo ./setup_ROSbot_for_gg.sh
 ```
@@ -317,11 +317,11 @@ To deploy application, you will use RoboMaker environment created in previous st
 
 ![RoboMaker open IDE](images/aws_tutorial_robomaker_8.png)
 
-- In the IDE, go to bash tab and clone the `RoboMakerROSbotProject` repository in `~/environment/` directory:
+- In the IDE, go to bash tab and clone the `rosbot-robomaker` repository in `~/environment/` directory:
 
 ```
 cd ~/environment/
-git clone --recurse-submodules https://github.com/lukaszmitka/RoboMakerROSbotProject.git
+git clone --recurse-submodules https://github.com/husarion/rosbot-robomaker.git RoboMakerROSbotProject
 ```
 
 ![RoboMaker open IDE](images/aws_tutorial_robomaker_10.png)
