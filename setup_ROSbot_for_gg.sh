@@ -1,6 +1,41 @@
 #!/bin/bash
-# It is required to meke below modifications in ROSbot system
+# It is required to make below modifications in ROSbot system
 # Reboot after executing script is necessary
+
+function download_greengrass () {
+    # check system architecture
+    ARCH=$(uname -m)
+    if [ "$ARCH" == "x86_64" ]; then
+        echo "Working on x86_64"
+        GREP_EXPR="greengrass-linux-x86-64"
+    elif [ "$ARCH" == "armv7l" ]; then
+        echo "Working on armv7l"
+        GREP_EXPR="greengrass-linux-armv7l"
+    else 
+        echo "No compatible architecture detected"
+        return 1
+    fi
+
+    # Get Greengrass donload page
+    GG_HTML=$(wget -O - https://docs.aws.amazon.com/greengrass/latest/developerguide/what-is-gg.html)
+    # Extract download links
+    LINK_LINES=$( echo "$GG_HTML" | grep $GREP_EXPR)
+
+    # download file
+    IFS=$'\n'
+    for HTML_LINE in $LINK_LINES
+    do
+        DL_LINK=$(expr match "$HTML_LINE" '.*\(https://.*tar.gz\)')
+        echo "Downloading from: $DL_LINK"
+        wget $DL_LINK -O greengrass.tar.gz
+        if [ $? -eq 0 ]; then
+            echo "Download complete!"
+            return 0
+            break
+        fi
+    done
+    return 1
+}
 
 if [ "$(id -u)" != 0 ]; then
     echo "Error: please run the installer as root."
@@ -14,9 +49,8 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
 
 apt update
 curl -sL https://deb.nodesource.com/setup_6.x | bash -
-apt install -y nodejs software-properties-common oracle-java8-installer python3-colcon-common-extensions python3-pip
+apt install -y nodejs software-properties-common python3-colcon-common-extensions python3-pip
 pip3 install --upgrade colcon-common-extensions setuptools
-ln /usr/bin/java /usr/bin/java8
 ln /usr/bin/node /usr/bin/nodejs6.10
 
 echo 'KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE:="0777", SYMLINK+="rplidar"' > /etc/udev/rules.d/rplidar.rules
@@ -41,8 +75,13 @@ if ! grep -q 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt; then
     echo $LINE > /boot/cmdline.txt
 fi
 
-wget https://d1onfpft10uf5o.cloudfront.net/greengrass-core/downloads/1.7.1/greengrass-linux-armv7l-1.7.1.tar.gz
-tar -zxvf greengrass-linux-armv7l-1.7.1.tar.gz -C /
+download_greengrass
+if [ $? -eq 0 ]; then
+    echo "Function executed successfully"
+else 
+    echo "Can not download Greengrass, please check your internet connection."
+fi
+tar -zxvf greengrass.tar.gz -C /
 
 cd /greengrass/certs
 wget -O root.ca.pem http://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
