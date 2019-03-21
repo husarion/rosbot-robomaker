@@ -8,9 +8,15 @@ function download_greengrass () {
     if [ "$ARCH" == "x86_64" ]; then
         echo "Working on x86_64"
         GREP_EXPR="greengrass-linux-x86-64"
+        if ! grep -q 'ROSBOT_VER="2.0_PRO"' /etc/environment; then
+            echo 'ROSBOT_VER="2.0_PRO"' >> /etc/environment
+        fi
     elif [ "$ARCH" == "armv7l" ]; then
         echo "Working on armv7l"
         GREP_EXPR="greengrass-linux-armv7l"
+        if ! grep -q 'ROSBOT_VER="2.0' /etc/environment; then
+            echo 'ROSBOT_VER="2.0"' >> /etc/environment
+        fi
     else 
         echo "No compatible architecture detected"
         return 1
@@ -85,3 +91,5 @@ tar -zxvf greengrass.tar.gz -C /
 
 cd /greengrass/certs
 wget -O root.ca.pem http://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
+
+echo "You ned to restart ROSbot now to apply all changes"
