@@ -7,12 +7,14 @@ function download_greengrass () {
     ARCH=$(uname -m)
     if [ "$ARCH" == "x86_64" ]; then
         echo "Working on x86_64"
+        sudo cp rosbot_pro.yaml /rosbot_conf.yaml
         GREP_EXPR="greengrass-linux-x86-64"
         if ! grep -q 'ROSBOT_VER="2.0_PRO"' /etc/environment; then
             echo 'ROSBOT_VER="2.0_PRO"' >> /etc/environment
         fi
     elif [ "$ARCH" == "armv7l" ]; then
         echo "Working on armv7l"
+        sudo cp rosbot_2_0.yaml /rosbot_conf.yaml
         GREP_EXPR="greengrass-linux-armv7l"
         if ! grep -q 'ROSBOT_VER="2.0' /etc/environment; then
             echo 'ROSBOT_VER="2.0"' >> /etc/environment
