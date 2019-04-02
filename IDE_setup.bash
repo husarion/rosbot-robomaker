@@ -15,7 +15,8 @@ else
 fi
 
 # install boto3
-pip install boto3
+pip install -U boto3
+pip3 install -U colcon-bundle
 
 # update the submodules
 cd ~/environment/RoboMakerROSbotProject
@@ -63,4 +64,4 @@ aws s3 cp robot_ws/armhf_bundle/output.tar.gz s3://$BUCKET_NAME/RoboMakerROSbotP
 
 # start deployment job
 cd ~/environment/RoboMakerROSbotProject
-python deploy.py $BUCKET_NAME
+python deploy.py $BUCKET_NAME --robot ROSbotOffice
