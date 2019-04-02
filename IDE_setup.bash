@@ -48,9 +48,6 @@ aws s3 cp robot_ws/bundle/output.tar.gz s3://$BUCKET_NAME/RoboMakerROSbotProject
 cd /opt/robomaker/cross-compilation-dockerfile/
 sudo bin/build_image.bash
 
-# stop and delete all running docker containers
-docker stop $(docker ps -aq)
-docker rm $(docker ps -aq)
 
 # start build docker
 cd ~/environment/RoboMakerROSbotProject
