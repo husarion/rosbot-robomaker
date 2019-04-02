@@ -73,4 +73,4 @@ aws s3 cp robot_ws/armhf_bundle/output.tar.gz s3://$BUCKET_NAME/RoboMakerROSbotP
 
 # start deployment job
 cd ~/environment/RoboMakerROSbotProject
-python deploy.py $BUCKET_NAME --robot ROSbotOffice
+python deploy.py $BUCKET_NAME --robot ROSbot
