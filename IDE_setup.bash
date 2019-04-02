@@ -45,15 +45,27 @@ cd ~/environment/RoboMakerROSbotProject
 aws s3 cp robot_ws/bundle/output.tar.gz s3://$BUCKET_NAME/RoboMakerROSbotProject/robot_ws/bundle/output.tar.gz
 
 # prepare docker for armhf compilation
-cd /opt/robomaker/cross-compilation-dockerfile/
-sudo bin/build_image.bash
-
+if [[ $(docker ps -q) ]]
+then
+    EXISTING_CONTAINER_ID=$(docker ps -q)
+    echo "Use currently running container: $EXISTING_CONTAINER_ID"
+elif [[ $(docker ps -q -a) ]]
+then
+    EXISTING_CONTAINER_ID=$(docker ps -q -a -l)
+    echo "Restart existing container: $EXISTING_CONTAINER_ID"
+    docker start $EXISTING_CONTAINER_ID
+else
+    echo "Create new container"
+    cd /opt/robomaker/cross-compilation-dockerfile/
+    sudo bin/build_image.bash
+    cd ~/environment/RoboMakerROSbotProject
+    EXISTING_CONTAINER_ID=$(sudo docker run -v $(pwd):/ws -dt ros-cross-compile:armhf)
+fi
 
 # start build docker
 cd ~/environment/RoboMakerROSbotProject
-CONTAINER_ID=$(sudo docker run -v $(pwd):/ws -dt ros-cross-compile:armhf)
-echo "Cross compile started with ID: " $CONTAINER_ID
-docker exec $CONTAINER_ID ws/armhf.bash
+echo "Cross compile started with ID: " $EXISTING_CONTAINER_ID
+docker exec $EXISTING_CONTAINER_ID ws/armhf.bash
 
 # copy armhf bundle to S3 bucket
 cd ~/environment/RoboMakerROSbotProject
