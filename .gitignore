@@ -1,5 +1,11 @@
 .vscode
 .notes
+container_id
+roboMakerSettings.json
+robot_ws/armhf_build/
+robot_ws/armhf_bundle/
+robot_ws/armhf_install/
+robot_ws/bundle/
 robot_ws/build/
 robot_ws/install/
 robot_ws/log/
