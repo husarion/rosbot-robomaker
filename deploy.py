@@ -154,7 +154,7 @@ def add_armhf_to_app(robomaker, app_arn, bucket_id, prefix):
     if not found_armhf_arch:
         armhf_source = OrderedDict([
             ('s3Bucket', bucket_id),
-            ('s3Key', prefix+'/output.armhf.tar.gz'),
+            ('s3Key', prefix+'/output.armhf.tar'),
             ('architecture', 'ARMHF')
         ])
         sources_list.append(armhf_source)
@@ -162,7 +162,7 @@ def add_armhf_to_app(robomaker, app_arn, bucket_id, prefix):
     if not found_x86_64_arch:
         armhf_source = OrderedDict([
             ('s3Bucket', bucket_id),
-            ('s3Key', prefix+'/output.tar.gz'),
+            ('s3Key', prefix+'/output.tar'),
             ('architecture', 'X86_64')
         ])
         sources_list.append(armhf_source)
@@ -185,14 +185,14 @@ def create_robot_app(robomaker, app_name, bucket, prefix):
 
     x86_64_source = OrderedDict([
         ('s3Bucket', bucket),
-        ('s3Key', prefix+'/output.tar.gz'),
+        ('s3Key', prefix+'/output.tar'),
         ('architecture', 'X86_64')
     ])
     sources_list.append(x86_64_source)
 
     armhf_source = OrderedDict([
         ('s3Bucket', bucket),
-        ('s3Key', prefix+'/output.armhf.tar.gz'),
+        ('s3Key', prefix+'/output.armhf.tar'),
         ('architecture', 'ARMHF')
     ])
     sources_list.append(armhf_source)

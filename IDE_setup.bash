@@ -42,7 +42,7 @@ colcon bundle --apt-package-blacklist rosbot.blacklist
 
 # copy X86_64 bundle to S3 bucket
 cd ~/environment/RoboMakerROSbotProject
-aws s3 cp robot_ws/bundle/output.tar.gz s3://$BUCKET_NAME/RoboMakerROSbotProject/robot_ws/bundle/output.tar.gz
+aws s3 cp robot_ws/bundle/output.tar s3://$BUCKET_NAME/RoboMakerROSbotProject/robot_ws/bundle/output.tar
 
 # prepare docker for armhf compilation
 if [[ $(docker ps -q) ]]
@@ -69,7 +69,7 @@ docker exec $EXISTING_CONTAINER_ID ws/armhf.bash
 
 # copy armhf bundle to S3 bucket
 cd ~/environment/RoboMakerROSbotProject
-aws s3 cp robot_ws/armhf_bundle/output.tar.gz s3://$BUCKET_NAME/RoboMakerROSbotProject/robot_ws/bundle/output.armhf.tar.gz
+aws s3 cp robot_ws/armhf_bundle/output.tar s3://$BUCKET_NAME/RoboMakerROSbotProject/robot_ws/bundle/output.armhf.tar
 
 # start deployment job
 cd ~/environment/RoboMakerROSbotProject

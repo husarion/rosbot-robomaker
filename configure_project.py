@@ -111,7 +111,7 @@ def getSimulationApp(bucket_name, tutorial_number):
     simulationApp = OrderedDict([
         ('name', 'RoboMakerROSbotTutorialSimulation'),
         ('s3Bucket', bucket_name),
-        ('sourceBundleFile', './RoboMakerROSbotProject/simulation_ws/bundle/output.tar.gz'),
+        ('sourceBundleFile', './RoboMakerROSbotProject/simulation_ws/bundle/output.tar'),
         ('architecture', 'X86_64'),
         ('launchConfig', getSimLaunchConfig(tutorial_number)),
         ('robotSoftwareSuite', getRobotSoftwareSuite()),
@@ -134,7 +134,7 @@ def getRobotApp(bucket_name, tutorial_number):
     robotApp = OrderedDict([
         ('name', 'RoboMakerROSbotTutorialRobot'),
         ('s3Bucket', bucket_name),
-        ('sourceBundleFile', './RoboMakerROSbotProject/robot_ws/bundle/output.tar.gz'),
+        ('sourceBundleFile', './RoboMakerROSbotProject/robot_ws/bundle/output.tar'),
         ('architecture', 'X86_64'),
         ('robotSoftwareSuite', getRobotSoftwareSuite()),
         ('launchConfig', getRobotLaunchConfig(tutorial_number))
@@ -149,7 +149,7 @@ def getSimCfg(bucket_name, tutorial_number, iam_role):
         ('simulation', get_simulation_object(bucket_name, iam_role))
     ])
     return cfg
-
+    
 
 def getSimulationJob(bucket_name, tutorial_number, iam_role):
     simID = 'ROSbotTutorial_SimulationJob_' + str(tutorial_number)
