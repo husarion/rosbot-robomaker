@@ -14,9 +14,21 @@ else
     exit 1
 fi
 
-# install boto3
-pip install -U boto3
-pip3 install -U colcon-bundle
+FIRST_RUN=0
+if [ ! -d robot_ws/log ]
+then
+    # Script first run
+    FIRST_RUN=1
+    while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+        echo "wait for other apt instances to finish"
+        sleep 1
+    done
+    # Need to make configurations
+    sudo apt update
+    sudo apt upgrade -y
+    sudo -H pip install -U boto3
+    sudo -H pip3 install -U colcon-bundle
+fi
 
 # update the submodules
 cd ~/environment/RoboMakerROSbotProject
@@ -60,6 +72,13 @@ else
     sudo bin/build_image.bash
     cd ~/environment/RoboMakerROSbotProject
     EXISTING_CONTAINER_ID=$(sudo docker run -v $(pwd):/ws -dt ros-cross-compile:armhf)
+fi
+
+if [ $FIRST_RUN -eq 1 ]
+then
+    docker exec $EXISTING_CONTAINER_ID apt update
+    docker exec $EXISTING_CONTAINER_ID apt upgrade -y
+    docker exec $EXISTING_CONTAINER_ID pip3 install -U colcon-bundle
 fi
 
 # start build docker
