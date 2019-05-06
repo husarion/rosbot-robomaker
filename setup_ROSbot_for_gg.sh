@@ -57,7 +57,7 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
 
 apt update
 curl -sL https://deb.nodesource.com/setup_6.x | bash -
-apt install -y nodejs software-properties-common python3-colcon-common-extensions python3-pip
+apt install -y nodejs software-properties-common python3-colcon-common-extensions python3-pip jq
 pip3 install --upgrade colcon-common-extensions setuptools
 ln /usr/bin/node /usr/bin/nodejs6.10
 
@@ -81,6 +81,12 @@ fi
 if ! grep -q 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt; then
     LINE=$(sed 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt)
     echo $LINE > /boot/cmdline.txt
+fi
+
+LINE='if [ -f /tmp/roboMakerDeploymentPackage/packageInfo ] ; then for f in $(jq ".overlays | .[]" /tmp/roboMakerDeploymentPackage/packageInfo -r); do echo $f; BUNDLE_CURRENT_PREFIX=/tmp/roboMakerDeploymentPackage/$f; source /tmp/roboMakerDeploymentPackage/$f/setup.sh --extend; done; fi'
+if ! grep -q '/tmp/roboMakerDeploymentPackage/packageInfo' ~/.bashrc; 
+then 
+    echo $LINE >> ~/.bashrc
 fi
 
 download_greengrass

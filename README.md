@@ -350,7 +350,7 @@ You may observe in real time how ROSbot is building the map. If you’d like to 
 Open terminal witm menu `Applications` -> `Terminal emulation` and execute:
 
 ```
-rviz -d /tmp/roboMakerDeploymentPackage/opt/install/tutorial_pkg/share/tutorial_pkg/rviz/tutorial_8.rviz
+rviz -d $(rospack find tutorial_pkg)/rviz/tutorial_8.rviz
 ```
 
 You will see the Rviz visualization tool with created map and a planned trajectory.
