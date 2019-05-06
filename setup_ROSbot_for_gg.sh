@@ -92,6 +92,10 @@ fi
 tar -zxvf greengrass.tar.gz -C /
 
 cd /greengrass/certs
+<<<<<<< 69a0b751ae2fc789d6d3e958c9197704a9219f06
 wget -O root.ca.pem sudo wget -O root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
+=======
+wget -O root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
+>>>>>>> Update CA address
 
 echo "You ned to restart ROSbot now to apply all changes"
