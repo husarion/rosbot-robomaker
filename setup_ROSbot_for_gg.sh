@@ -92,6 +92,6 @@ fi
 tar -zxvf greengrass.tar.gz -C /
 
 cd /greengrass/certs
-wget -O root.ca.pem http://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
+wget -O root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
 
 echo "You ned to restart ROSbot now to apply all changes"
