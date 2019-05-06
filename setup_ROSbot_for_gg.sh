@@ -57,7 +57,7 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
 
 apt update
 curl -sL https://deb.nodesource.com/setup_6.x | bash -
-apt install -y nodejs software-properties-common python3-colcon-common-extensions python3-pip
+apt install -y nodejs software-properties-common python3-colcon-common-extensions python3-pip jq
 pip3 install --upgrade colcon-common-extensions setuptools
 ln /usr/bin/node /usr/bin/nodejs6.10
 
@@ -83,6 +83,12 @@ if ! grep -q 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt; then
     echo $LINE > /boot/cmdline.txt
 fi
 
+LINE='if [ -f /tmp/roboMakerDeploymentPackage/packageInfo ] ; then for f in $(jq ".overlays | .[]" /tmp/roboMakerDeploymentPackage/packageInfo -r); do echo $f; BUNDLE_CURRENT_PREFIX=/tmp/roboMakerDeploymentPackage/$f; source /tmp/roboMakerDeploymentPackage/$f/setup.sh --extend; done; fi'
+if ! grep -q '/tmp/roboMakerDeploymentPackage/packageInfo' ~/.bashrc; 
+then 
+    echo $LINE >> ~/.bashrc
+fi
+
 download_greengrass
 if [ $? -eq 0 ]; then
     echo "Function executed successfully"
@@ -92,10 +98,6 @@ fi
 tar -zxvf greengrass.tar.gz -C /
 
 cd /greengrass/certs
-<<<<<<< 69a0b751ae2fc789d6d3e958c9197704a9219f06
-wget -O root.ca.pem sudo wget -O root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
-=======
 wget -O root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
->>>>>>> Update CA address
 
 echo "You ned to restart ROSbot now to apply all changes"
