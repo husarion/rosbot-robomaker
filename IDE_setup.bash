@@ -8,9 +8,20 @@ then
     echo "Bucket name is " $BUCKET_NAME
     echo "IAM role is " $IAM_ROLE
     echo "Deployment role ARN is " $DEPLOYMENT_ROLE_ARN
+elif [ $# -eq 4 ]
+then
+    BUCKET_NAME="$1"
+    IAM_ROLE="$2"
+    DEPLOYMENT_ROLE_ARN="$3"
+    LAUNCH_FILE_NAME="$4"
+    echo "Bucket name is " $BUCKET_NAME
+    echo "IAM role is " $IAM_ROLE
+    echo "Deployment role ARN is " $DEPLOYMENT_ROLE_ARN
+    echo "Launch file name is " $LAUNCH_FILE_NAME
 else
-    echo "Please run this script with two arguments"
-    echo "./IDE_setup.sh BUCKET_NAME IAM_ROLE"
+    echo "Please run this script with three of four arguments"
+    echo "./IDE_setup.sh BUCKET_NAME IAM_ROLE DEPLOYMENT_ROLE_ARN"
+    echo "./IDE_setup.sh BUCKET_NAME IAM_ROLE DEPLOYMENT_ROLE_ARN LAUNCH_FILE_NAME"
     exit 1
 fi
 
@@ -92,4 +103,10 @@ aws s3 cp robot_ws/armhf_bundle/output.tar s3://$BUCKET_NAME/RoboMakerROSbotProj
 
 # start deployment job
 cd ~/environment/RoboMakerROSbotProject
-python deploy.py $BUCKET_NAME --robot ROSbot
+
+if [[ $LAUNCH_FILE_NAME ]]
+then 
+    python deploy.py $BUCKET_NAME --robot ROSbot --launch $LAUNCH_FILE_NAME
+else
+    python deploy.py $BUCKET_NAME --robot ROSbot
+fi

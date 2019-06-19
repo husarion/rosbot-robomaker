@@ -126,6 +126,38 @@ def create_deployment(robomaker, fleet_arn, app_arn, app_ver, tutorial_number):
     print(response)
 
 
+def create_deployment_with_pre_post_scripts(robomaker, fleet_arn, app_arn, app_ver, launch, pre_launch, post_launch):
+    package_name = 'tutorial_pkg'
+    master_uri_id = 'ROS_MASTER_URI'
+    master_uri_value = 'http://master:11311'
+    ipv6_id = 'ROS_IPV6'
+    ipv6_value = 'on'
+    response = robomaker.create_deployment_job(
+        deploymentConfig={
+            'concurrentDeploymentPercentage': 20,
+            'failureThresholdPercentage': 25
+        },
+        fleet=fleet_arn,
+        deploymentApplicationConfigs=[
+            {
+                'application': app_arn,
+                'applicationVersion': app_ver,
+                'launchConfig': {
+                    'packageName': package_name,
+                    'launchFile': launch,
+                    'preLaunchFile': pre_launch,
+                    'postLaunchFile': post_launch,
+                    'environmentVariables': {
+                        master_uri_id: master_uri_value,
+                        ipv6_id: ipv6_value
+                    }
+                }
+            },
+        ]
+    )
+    print(response)
+
+
 def add_armhf_to_app(robomaker, app_arn, bucket_id, prefix):
     describe_robot_application_response = robomaker.describe_robot_application(
         application=app_arn
@@ -207,7 +239,7 @@ def create_robot_app(robomaker, app_name, bucket, prefix):
     return create_robot_application_response.get('arn')
 
 
-def start_deployment(tutorial_number, user_fleet_name, user_robot_name, s3bucket):
+def start_deployment(tutorial_number, user_fleet_name, user_robot_name, s3bucket, launch_name):
     # Begin working with robomaker
     print("Init robomaker")
     robomaker_client = boto3.client('robomaker')
@@ -237,8 +269,14 @@ def start_deployment(tutorial_number, user_fleet_name, user_robot_name, s3bucket
             robomaker_client, 'RoboMakerROSbotTutorialRobot', s3bucket, app_key_prefix)
     app_version = get_current_application_version(
         robomaker_client, application_arn)
-    create_deployment(robomaker_client, fleet_arn,
-                      application_arn, app_version, tutorial_number)
+
+    if not launch_name:
+        create_deployment(robomaker_client, fleet_arn, application_arn, app_version, tutorial_number)
+    else:
+        pre_launch = "deploymentScripts/pre_launch_script.sh"
+        post_launch = "deploymentScripts/post_launch_script.sh"
+        create_deployment_with_pre_post_scripts(robomaker, fleet_arn, app_arn, app_ver, launch_name, pre_launch, post_launch)
+    
 
 
 if __name__ == "__main__":
@@ -252,6 +290,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--tutorial", help="Number of tutorial to be used for deployment, default is 8", type=int)
     parser.add_argument(
+        "--launch", help="Name of launch file to be used for deployment, default is None")
+    parser.add_argument(
         "--fleet", help="Fleet name to be used, default is ROSbotFleet")
     parser.add_argument(
         "--robot", help="Robot name to be used, default is ROSbot")
@@ -264,6 +304,11 @@ if __name__ == "__main__":
     else:
         tutorial_num = 8
 
+    if args.launch:
+        tutorial_launch = args.launch
+    else:
+        tutorial_launch = None
+
     if args.fleet:
         fleet_name = args.fleet
     else:
@@ -274,4 +319,4 @@ if __name__ == "__main__":
     else:
         robot_name = 'ROSbot'
 
-    start_deployment(tutorial_num, fleet_name, robot_name, bucket_name)
+    start_deployment(tutorial_num, fleet_name, robot_name, bucket_name, tutorial_launch)
