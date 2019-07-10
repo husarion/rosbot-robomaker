@@ -210,6 +210,7 @@ def main():
                 getSimulationJob(user_bucket_name, 6, user_iam_role),
                 getSimulationJob(user_bucket_name, 7, user_iam_role),
                 getSimulationJob(user_bucket_name, 8, user_iam_role),
+                getSimulationJob(user_bucket_name, 9, user_iam_role),
                 workflow_1
             ])
     ])
