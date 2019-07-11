@@ -145,8 +145,6 @@ def create_deployment_with_pre_post_scripts(robomaker, fleet_arn, app_arn, app_v
                 'launchConfig': {
                     'packageName': package_name,
                     'launchFile': launch,
-                    'preLaunchFile': pre_launch,
-                    'postLaunchFile': post_launch,
                     'environmentVariables': {
                         master_uri_id: master_uri_value,
                         ipv6_id: ipv6_value
