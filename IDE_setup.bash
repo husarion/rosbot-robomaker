@@ -105,7 +105,8 @@ aws s3 cp robot_ws/armhf_bundle/output.tar s3://$BUCKET_NAME/RoboMakerROSbotProj
 cd ~/environment/RoboMakerROSbotProject
 
 if [[ $LAUNCH_FILE_NAME ]]
-then 
+then
+    ./configure_ec2_instance.sh
     python deploy.py $BUCKET_NAME --robot ROSbot --launch $LAUNCH_FILE_NAME
 else
     python deploy.py $BUCKET_NAME --robot ROSbot

@@ -273,8 +273,8 @@ def start_deployment(tutorial_number, user_fleet_name, user_robot_name, s3bucket
     if not launch_name:
         create_deployment(robomaker_client, fleet_arn, application_arn, app_version, tutorial_number)
     else:
-        pre_launch = "deploymentScripts/pre_launch_script.sh"
-        post_launch = "deploymentScripts/post_launch_script.sh"
+        pre_launch = ""
+        post_launch = ""
         create_deployment_with_pre_post_scripts(robomaker_client, fleet_arn, application_arn, app_version, launch_name, pre_launch, post_launch)
     
 

@@ -67,7 +67,7 @@ echo 'KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE
 echo 'KERNEL=="ttyUSB1", MODE:="0777", SYMLINK+="core2serial"
 KERNEL=="ttyCORE2", MODE:="0777"' > /etc/udev/rules.d/core2serial.rules
 
-adduser --system ggc_user
+adduser --disabled-password --gecos "" ggc_user
 addgroup --system ggc_group
 
 if ! grep -q 'fs.protected_hardlinks = 1' /etc/sysctl.d/98-rpi.conf; then
@@ -99,5 +99,20 @@ tar -zxvf greengrass.tar.gz -C /
 
 cd /greengrass/certs
 wget -O root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
+
+source /opt/ros/kinetic/setup.bash
+mkdir ~/ros_workspace
+mkdir ~/ros_workspace/src
+cd ~/ros_workspace/src
+catkin_init_workspace
+cd ~/ros_workspace
+catkin_make
+echo "source ~/ros_workspace/devel/setup.sh" >> ~/.bashrc
+source ~/ros_workspace/devel/setup.sh
+cd ~/ros_workspace/src/
+git clone https://github.com/husarion/tutorial_pkg.git
+cd ~/ros_workspace/
+rosdep install --from-paths src --ignore-src -r -y
+catkin_make
 
 echo "You ned to restart ROSbot now to apply all changes"

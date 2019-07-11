@@ -12,3 +12,4 @@ robot_ws/log/
 simulation_ws/build/
 simulation_ws/install/
 simulation_ws/log/
+rosbot_key.pem
