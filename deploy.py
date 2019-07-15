@@ -145,6 +145,8 @@ def create_deployment_with_pre_post_scripts(robomaker, fleet_arn, app_arn, app_v
                 'launchConfig': {
                     'packageName': package_name,
                     'launchFile': launch,
+                    'preLaunchFile': pre_launch,
+                    'postLaunchFile': post_launch,
                     'environmentVariables': {
                         master_uri_id: master_uri_value,
                         ipv6_id: ipv6_value
@@ -271,10 +273,9 @@ def start_deployment(tutorial_number, user_fleet_name, user_robot_name, s3bucket
     if not launch_name:
         create_deployment(robomaker_client, fleet_arn, application_arn, app_version, tutorial_number)
     else:
-        pre_launch = ""
-        post_launch = ""
+        pre_launch = "pre_launch_script.sh"
+        post_launch = "post_launch_script.sh"
         create_deployment_with_pre_post_scripts(robomaker_client, fleet_arn, application_arn, app_version, launch_name, pre_launch, post_launch)
-    
 
 
 if __name__ == "__main__":
