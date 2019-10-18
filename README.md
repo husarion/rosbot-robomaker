@@ -66,66 +66,101 @@ To attach the antenna, screw it to the antenna connector on the ROSbot rear pane
 
 ![image](/images/rosbot_antenna.png)
 
-## Connecting to Wi-Fi network and Husarion cloud
-
-Setup [Husarion Cloud](https://cloud.husarion.com) account to program low-level firmware to your ROSbot.
-
-### Connecting using display, mouse and keyboard
+## Connecting to Wi-Fi network 
 
 ROSbot is basically a computer running Ubuntu, so let's configure it like a standard PC computer.
 
 1. Plug in a display with HDMI, mouse and keyboard into USB port in the rear panel of ROSbot.
 2. Turn on the robot and wait until it boots.
-3. Connect to a Wi-Fi network
-4. Connect to a Husarion cloud
-* open https://cloud.husarion.com in your web browser
-* click **Add new** button
-* enter device name and click **Next**
-* copy a code under a QR code (it looks like: `prod|xxxxxxxxxxxxxxxxxxxxxx`)
-* open Linux terminal and type (including code from the previous step) `sudo husarion-register --code "prod|xxxxxxxxxxxxxxxxxxxxxx"`
-* after a few seconds you should see your device online at https://cloud.husarion.com
+3. Use networking menu located on top-right of the screen to connect to a Wi-Fi network.
+4. When connection is active, use networking menu again and choose **Connection Information** to find device IP address.
+5. Note the ROSbot IP address, you will need it later.
 
-![image](/images/5_devAdded.png)
+## Flashing low level firmware
 
-> There are two other ways to connect ROSbot to Husarion cloud: ethernet adapter or mobile app. If you prefer them, check out this guide: https://husarion.com/tutorials/howtostart/rosbot---quick-start/#connecting-to-the-cloud.
+1. Disable `husarnet-configurator` and `husarion-shield services` and reboot your  ROSbot. These services are responsible for connection to the Husarion Cloud and they also control GPIO pins that are used for uploading the firmware. We will need direct  access to them. Run:
 
-## Getting the device IP
+    ```bash
+    sudo systemctl disable husarnet-configurator
+    sudo systemctl stop husarnet-configurator
+    sudo systemctl disable husarion-shield
+    sudo reboot
+    ```
 
-Click "+" next to your device name and select "IDE".
+2. Install necessary support libraries on your robot. In the terminal run:
 
-![image](/images/6_openWebIDE.png)
+    **ROSbot 2.0:**
 
-Click "More" button to open device details view.
+    ```bash
+    cd ~/ && git clone https://github.com/TinkerBoard/gpio_lib_python.git
+    cd ~/gpio_lib_python && sudo python setup.py install --record files.txt
+    ```
 
-Find line `Local IP` and note address provided, we will refer to it later as `ROSBOT_IP`.
+    **ROSbot 2.0 PRO:**
 
-## Programming a firmware ##
+    ```bash
+    cd ~/ && git clone https://github.com/vsergeev/python-periphery.git
+    cd ~/python-periphery && sudo python setup.py install --record files.txt
+    ```
 
-First you will program the ROSbot:
+    Restart the terminal after the installation.
 
-Click "+" next to your device name and select "IDE".
+3. Install `stm32loader` on your robot:
 
-![image](/images/6_openWebIDE.png)
+    ```bash
+    cd ~/ && git clone https://github.com/byq77/stm32loader.git
+    cd ~/stm32loader && sudo python setup.py install --record files.txt
+    ```
 
-Click "Create" button to open new project wizard.
+    You can check if tool works by running following commands:
 
-![image](/images/7_createNewProj.png)
+    **ROSbot 2.0:**
 
-Select CORE2 board, chose "ROSbot default firmware" project template and enter name, eg. myROSbot, and click "Create project" button.
+    ```bash
+    sudo stm32loader -c tinker -f F4
+    ```
 
-![image](/images/8_projSettings.png)
+    **ROSbot 2.0 PRO:**
 
-This is a web Integrated Development Environment in which you can write a firmware for your device, and upload the firmware through the Internet.
+    ```bash
+    sudo stm32loader -c upboard -f F4
+    ```
 
-![image](/images/9_webIDEmain.png)
+4. Download the firmware
 
-Click `<none>` (ellipse on image) next to `selected device` and select `myFirstDev` device.
+Download the appropriate firmware to your ROSbot and save it in `/home/husarion/`:
 
-Click a button with a `cloud with arrow` (red square on image) to upload new firmware to your device. Well done! now you can check how your first program works.
+- [`ROSbot 2.0`](https://files.husarion.com/rosbot-firmware/rosbot-2.0-fw-v0.7.2.bin)
+- [`ROSbot 2.0 Pro`](https://files.husarion.com/rosbot-firmware/rosbot-2.0-pro-fw-v0.7.2.bin)
 
-![image](/images/11_webIDEprogram.png)
+5.  Flash the firmware
 
-In the previous step you have uploaded the firmware into your ROSbot. Let's check how it works!
+    To upload the firmware run:
+
+    **ROSbot 2.0**:
+
+    ```bash
+    $ sudo stm32loader -c tinker -u -W
+    ```
+
+    ```bash
+    $ sudo stm32loader -c tinker -e -w -v rosbot-2.0-***.bin
+    ```
+
+    **ROSbot 2.0 PRO**:
+
+    ```bash
+    sudo stm32loader -c upboard -u -W
+    ```
+
+    ```bash
+    sudo stm32loader -c upboard -e -w -v rosbot-2.0-***.bin
+    ```
+
+    Wait until firmware is uploaded.
+
+
+6. Unplug display, mouse and keyboard.
 
 ## RoboMaker ROSbot project ##
 
@@ -174,9 +209,11 @@ ROSbot need some system modifications before Greengrass will be able to run and 
 
 ![RoboMaker robot created](/images/aws_tutorial_robomaker_3.png)
 
-- Choose **Download** button next to **Download and store your Core's security resources**.
+- Choose **Download** button next to **Download and store your Core's security resources**, you will get `ROSbot-setup.zip` file.
 
-- You will get `ROSbot-setup.zip` file, it needs to be uploaded to ROSbot. The upload process will vary, depending on your host operating system.
+- From **Download the current AWS Greengrass Core software** choose file for architecture **ARMv71**, you will get `greengrass-linux-armv7l-1.9.2.tar.gz` file.
+
+- Both files need to be uploaded to ROSbot. The upload process will vary, depending on your host operating system.
 
 ### On Linux
 
@@ -186,11 +223,13 @@ Navigate to directory where the file is downloaded, by default it should be `~/D
 cd ~/Downloads
 ```
 
-- Copy the file to your ROSbot, you will need to substitute `ROSBOT_IP` with device address you noted earlier:
+- Copy both files to your ROSbot, you will need to substitute `ROSBOT_IP` with device address you noted earlier:
 
 ```
 scp ROSbot-setup.zip husarion@ROSBOT_IP:ROSbot-setup.zip
+scp greengrass-linux-armv7l-1.9.2.tar.gz husarion@ROSBOT_IP:greengrass-linux-armv7l-1.9.2.tar.gz
 ```
+
 
 ### On Windows
 
@@ -212,7 +251,7 @@ When all fields are filled up, click `Login` button to connect, you will see fil
 
 In the left tab navigate to directory where you downloaded the ROSbot-setup.zip file. In the right tab navigate to `/home/husarion` directory.
 
-Drag and drop the `ROSbot-setup.zip` to the right tab.
+Drag and drop the `ROSbot-setup.zip` and `greengrass-linux-armv7l-1.9.2.tar.gz` to the right tab.
 
 When the transfer is finished, close the window.
 

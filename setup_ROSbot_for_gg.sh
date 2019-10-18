@@ -89,13 +89,13 @@ then
     echo $LINE >> ~/.bashrc
 fi
 
-download_greengrass
-if [ $? -eq 0 ]; then
-    echo "Function executed successfully"
-else 
-    echo "Can not download Greengrass, please check your internet connection."
-fi
-tar -zxvf greengrass.tar.gz -C /
+# download_greengrass
+# if [ $? -eq 0 ]; then
+#     echo "Function executed successfully"
+# else 
+#     echo "Can not download Greengrass, please check your internet connection."
+# fi
+tar -zxvf greengrass-linux-armv7l-1.9.2.tar.gz -C /
 
 cd /greengrass/certs
 wget -O root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
