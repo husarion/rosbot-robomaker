@@ -13,3 +13,9 @@
 [submodule "simulation_ws/src/rosbot_description"]
 	path = simulation_ws/src/rosbot_description
 	url = https://github.com/husarion/rosbot_description.git
+[submodule "robot_ws/src/rosbot_ekf"]
+	path = robot_ws/src/rosbot_ekf
+	url = https://github.com/byq77/rosbot_ekf.git
+[submodule "simulation_ws/src/rosbot_ekf"]
+	path = simulation_ws/src/rosbot_ekf
+	url = https://github.com/byq77/rosbot_ekf.git
