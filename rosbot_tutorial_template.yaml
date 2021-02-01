@@ -27,7 +27,7 @@ Resources:
               - sts:AssumeRole
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/CloudWatchFullAccess'
-        - 'arn:aws:iam::aws:policy/AWSRoboMakerFullAccess'
+        - 'arn:aws:iam::aws:policy/AWSRoboMaker_FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
 
   ROSbotDeploymentRole:
